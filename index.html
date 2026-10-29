@@ -1,0 +1,4109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>VidyaDesk – School Management Demo</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <style>
+      :root {
+        --bg: #f4f6fb;
+        --card: #fff;
+        --tx: #14213d;
+        --mut: #5b6784;
+        --bd: #e2e7f1;
+        --pri: #1d4ed8;
+        --priTx: #fff;
+        --soft: #e8efff;
+        --ok: #0f7b4b;
+        --okBg: #dcf5e8;
+        --bad: #b42318;
+        --badBg: #fde3e0;
+        --warn: #9a5b00;
+        --warnBg: #fff0d1;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #0e1424;
+          --card: #171f35;
+          --tx: #e8ecf8;
+          --mut: #9aa5c4;
+          --bd: #273250;
+          --pri: #6b9bff;
+          --priTx: #0e1424;
+          --soft: #1f2c52;
+          --ok: #5fd9a0;
+          --okBg: #12372a;
+          --bad: #ff9d94;
+          --badBg: #40201d;
+          --warn: #ffc561;
+          --warnBg: #3d2d0e;
+        }
+      }
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+      }
+      body {
+        background: var(--bg);
+        color: var(--tx);
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        font-size: 15px;
+      }
+      h1,
+      h2,
+      h3,
+      .hd {
+        font-family: "Poppins", sans-serif;
+      }
+      .material-symbols-outlined {
+        font-size: 21px;
+        vertical-align: middle;
+        line-height: 1;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--bd);
+        border-radius: 14px;
+        padding: 16px;
+      }
+      .btn {
+        background: var(--pri);
+        color: var(--priTx);
+        border-radius: 10px;
+        padding: 8px 14px;
+        font-weight: 600;
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        cursor: pointer;
+        border: 0;
+        font-size: 14px;
+      }
+      .btn:focus-visible,
+      .nav:focus-visible,
+      .inp:focus-visible {
+        outline: 2px solid var(--pri);
+        outline-offset: 2px;
+      }
+      .b2 {
+        background: var(--soft);
+        color: var(--pri);
+      }
+      .bd {
+        background: var(--badBg);
+        color: var(--bad);
+      }
+      .wa {
+        background: #1fa855;
+        color: #fff;
+      }
+      .inp {
+        width: 100%;
+        background: var(--card);
+        color: var(--tx);
+        border: 1px solid var(--bd);
+        border-radius: 10px;
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+      label {
+        font-size: 13px;
+        color: var(--mut);
+        display: block;
+        margin-bottom: 4px;
+      }
+      .nav {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        width: 100%;
+        padding: 9px 12px;
+        border-radius: 10px;
+        color: var(--mut);
+        cursor: pointer;
+        text-align: left;
+        background: none;
+        border: 0;
+        font-size: 14px;
+      }
+      .nav.on {
+        background: var(--soft);
+        color: var(--pri);
+        font-weight: 600;
+      }
+      .tag {
+        padding: 2px 10px;
+        border-radius: 99px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-block;
+      }
+      .ok {
+        background: var(--okBg);
+        color: var(--ok);
+      }
+      .bad {
+        background: var(--badBg);
+        color: var(--bad);
+      }
+      .warn {
+        background: var(--warnBg);
+        color: var(--warn);
+      }
+      .info {
+        background: var(--soft);
+        color: var(--pri);
+      }
+      table {
+        width: 100%;
+        font-size: 14px;
+        border-collapse: collapse;
+      }
+      th {
+        text-align: left;
+        color: var(--mut);
+        font-weight: 500;
+        padding: 8px;
+        border-bottom: 1px solid var(--bd);
+        white-space: nowrap;
+      }
+      td {
+        padding: 8px;
+        border-bottom: 1px solid var(--bd);
+        white-space: nowrap;
+      }
+      .sw {
+        width: 42px;
+        height: 24px;
+        border-radius: 99px;
+        background: var(--bd);
+        position: relative;
+        cursor: pointer;
+        border: 0;
+        flex: none;
+      }
+      .sw::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #fff;
+        transition: 0.2s;
+      }
+      .sw.on {
+        background: var(--ok);
+      }
+      .sw.on::after {
+        left: 21px;
+      }
+      .btn[disabled] {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      summary::-webkit-details-marker {
+        display: none;
+      }
+      summary {
+        list-style: none;
+      }
+      #side {
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+      }
+      .paper {
+        background: #fff;
+        color: #111;
+        padding: 26px;
+        border: 3px double #1d4ed8;
+        max-width: 760px;
+        margin: 0 auto;
+        font-family: "Inter", sans-serif;
+      }
+      .paper table {
+        color: #111;
+      }
+      .paper td,
+      .paper th {
+        border: 1px solid #ccc;
+        color: #111;
+      }
+      @media print {
+        body > :not(#doc) {
+          display: none !important;
+        }
+        #doc {
+          position: static !important;
+          background: none !important;
+          padding: 0 !important;
+        }
+        .noprint {
+          display: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="login" class="min-h-screen grid md:grid-cols-2">
+      <div
+        class="hidden md:flex flex-col justify-center p-12"
+        style="background: var(--pri); color: var(--priTx)"
+      >
+        <span class="material-symbols-outlined" style="font-size: 48px"
+          >school</span
+        >
+        <h1 class="text-4xl font-bold mt-4">VidyaDesk</h1>
+        <p class="mt-3 text-lg opacity-90 max-w-md">
+          Admissions, fees, attendance, exams and staff HR for private schools,
+          all in one place. Parents need no login. They get updates on WhatsApp.
+        </p>
+      </div>
+      <div class="flex items-center justify-center p-5">
+        <div class="w-full max-w-md">
+          <h2 class="text-2xl font-bold">Demo login</h2>
+          <p class="text-sm" style="color: var(--mut)">
+            Pick a role and the details fill in automatically.
+          </p>
+          <div id="roleBtns" class="grid grid-cols-2 gap-2 my-4"></div>
+          <div class="card space-y-3">
+            <div>
+              <label for="u">Username</label
+              ><input id="u" class="inp" autocomplete="off" />
+            </div>
+            <div>
+              <label for="p">Password</label
+              ><input id="p" type="password" class="inp" />
+            </div>
+            <p id="err" class="text-sm hidden" style="color: var(--bad)">
+              Incorrect username or password.
+            </p>
+            <button class="btn w-full justify-center" onclick="doLogin()">
+              Log in
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="app" class="hidden">
+      <header
+        class="sticky top-0 z-30 flex items-center gap-3 px-4 py-3 border-b"
+        style="background: var(--card); border-color: var(--bd)"
+      >
+        <button
+          class="md:hidden"
+          aria-label="Menu"
+          onclick="side.classList.toggle('hidden')"
+        >
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <span class="hd font-semibold truncate" id="school"></span>
+        <span class="tag info hidden sm:inline-block" id="roleTag"></span>
+        <button class="ml-auto btn b2" onclick="logout()">
+          <span class="material-symbols-outlined">logout</span
+          ><span class="hidden sm:inline">Log out</span>
+        </button>
+      </header>
+      <div class="md:flex">
+        <aside
+          id="side"
+          class="hidden md:block md:w-64 p-3 border-r fixed md:sticky top-14 z-20 w-64 h-[calc(100vh-56px)] overflow-y-auto flex-none"
+          style="background: var(--card); border-color: var(--bd)"
+        >
+          <nav id="nav" class="space-y-0.5"></nav>
+        </aside>
+        <main id="main" class="flex-1 p-4 md:p-6 min-w-0 max-w-6xl"></main>
+      </div>
+    </div>
+    <div
+      id="doc"
+      class="hidden fixed inset-0 z-40 overflow-y-auto p-3"
+      style="background: rgba(10, 15, 30, 0.7)"
+    ></div>
+    <div
+      id="toast"
+      class="fixed bottom-5 left-1/2 -translate-x-1/2 px-4 py-2 rounded-xl hidden z-50 text-sm"
+      style="background: var(--tx); color: var(--bg)"
+    ></div>
+    <script>
+      const $ = (id) => document.getElementById(id),
+        v = (id) => $(id).value;
+      const S = {
+        name: "Shree Vidya Public School",
+        addr: "Boring Road, Patna, Bihar 800001",
+        ph: "0612-2345678",
+        pr: "Dr. S. K. Mishra",
+        aff: "CBSE Affiliation No. 330123",
+        ses: "2026-27",
+      };
+      const CLS = [
+        "LKG",
+        "UKG",
+        "1st",
+        "2nd",
+        "3rd",
+        "4th",
+        "5th",
+        "6th",
+        "7th",
+        "8th",
+        "9th",
+        "10th",
+      ];
+      let role,
+        page,
+        punched = null,
+        inc = 184500,
+        rno = 1043,
+        absent = new Set([2, 5]);
+      let secs = {};
+      CLS.forEach((c) => (secs[c] = ["A", "B"]));
+      let subj = [
+        "Hindi",
+        "English",
+        "Maths",
+        "Science",
+        "Social Science",
+        "Computer",
+        "GK",
+      ];
+      const names = [
+        "Aarav Sharma",
+        "Diya Verma",
+        "Kabir Singh",
+        "Meera Patel",
+        "Rohan Gupta",
+        "Sneha Yadav",
+        "Yash Mishra",
+        "Ananya Das",
+      ];
+      let stu = names.map((n, i) => ({
+        no: "SVPS-" + (101 + i),
+        n,
+        c: "5th A",
+        f: "Mr. " + n.split(" ")[1] + " Sr.",
+        mob: "98xxxxxx0" + (i + 1),
+        dob: "1" + i + " Mar 2016",
+        adm: "01 Apr 2022",
+        st: "Active",
+        due: [3600, 0, 7200, 1200, 4800, 0, 2400, 0][i],
+      }));
+      let enq = [
+        {
+          n: "Aditya Sinha",
+          mob: "98xxxxxx11",
+          c: "3rd",
+          fu: "2026-10-28",
+          st: "New",
+        },
+        {
+          n: "Zoya Khan",
+          mob: "98xxxxxx12",
+          c: "LKG",
+          fu: "2026-10-28",
+          st: "Visited",
+        },
+        {
+          n: "Ritu Kumari",
+          mob: "98xxxxxx13",
+          c: "6th",
+          fu: "2026-10-30",
+          st: "Interested",
+        },
+        {
+          n: "Om Prakash",
+          mob: "98xxxxxx14",
+          c: "UKG",
+          fu: "2026-10-25",
+          st: "Not interested",
+        },
+      ];
+      let tch = [
+        {
+          n: "Mrs. Rekha Singh",
+          cls: "5th A",
+          sub: "Maths",
+          mob: "98xxxxxx01",
+          sal: 24000,
+          p: 23,
+          l: 2,
+          a: 1,
+        },
+        {
+          n: "Mr. Anil Kumar",
+          cls: "8th B",
+          sub: "Science",
+          mob: "98xxxxxx02",
+          sal: 28000,
+          p: 22,
+          l: 1,
+          a: 3,
+        },
+        {
+          n: "Ms. Pooja Rani",
+          cls: "LKG A",
+          sub: "All subjects",
+          mob: "98xxxxxx03",
+          sal: 18000,
+          p: 24,
+          l: 2,
+          a: 0,
+        },
+        {
+          n: "Mr. Vivek Raj",
+          cls: "Not assigned",
+          sub: "English",
+          mob: "98xxxxxx04",
+          sal: 22000,
+          p: 20,
+          l: 2,
+          a: 4,
+        },
+      ];
+      let satt = ["Present", "Late", "Leave (CL)", "Absent"];
+      let exp = [
+        ["2026-10-26", "Electricity bill", "Utilities", 14200],
+        ["2026-10-20", "Chalk, registers, stationery", "Supplies", 6800],
+        ["2026-10-12", "Bus diesel", "Transport", 22500],
+      ];
+      let hol = [
+        ["2026-10-31", "Diwali break starts", "Festival"],
+        ["2026-11-05", "Guru Nanak Jayanti", "Festival"],
+        ["2026-11-14", "Children’s Day (half day)", "School"],
+        ["2026-12-25", "Christmas", "Festival"],
+      ];
+      let ptm = [
+        [
+          "2026-10-18",
+          "5th A",
+          "Mid-term progress",
+          "31 of 40",
+          "Parents asked for extra maths support.",
+        ],
+        [
+          "2026-09-20",
+          "8th B",
+          "Science project review",
+          "28 of 38",
+          "Lab fee clarified.",
+        ],
+      ];
+      let leaves = [
+        ["Mrs. Rekha Singh", "CL", "30 Oct 2026", "Fever", "warn"],
+        ["Mr. Anil Kumar", "SL", "31 Oct 2026", "Medical check-up", "warn"],
+      ];
+      let mods = {
+        Transport: 1,
+        Library: 0,
+        Payroll: 1,
+        Timetable: 1,
+        "ID card": 1,
+        "Online fees": 0,
+        SMS: 0,
+        Hostel: 0,
+      };
+      let rem = [1, 1, 0],
+        bal = { CL: [12, 5], SL: [10, 2], EL: [15, 3] };
+      let fs = [
+        ["LKG - UKG", 2000, 900, 500],
+        ["1st - 5th", 3000, 1100, 600],
+        ["6th - 8th", 3500, 1400, 700],
+        ["9th - 10th", 4500, 1800, 900],
+      ];
+      const R = {
+        root: {
+          n: "Root Admin",
+          u: "root",
+          p: "root123",
+          nav: [
+            ["dash", "dashboard", "Dashboard"],
+            ["schools", "domain_add", "Schools"],
+            ["modules", "toggle_on", "Modules ON/OFF"],
+            ["subs", "payments", "Subscriptions"],
+            ["log", "history", "Activity log"],
+          ],
+        },
+        admin: {
+          n: "Admin (Principal)",
+          u: "admin",
+          p: "admin123",
+          nav: [
+            ["dash", "dashboard", "Dashboard"],
+            ["settings", "settings", "School settings"],
+            ["setup", "tune", "Class and section setup"],
+            ["feestruct", "request_quote", "Fee structure"],
+            ["teachers", "groups", "Teachers and permissions"],
+            ["staffatt", "how_to_reg", "Staff attendance"],
+            ["payroll", "payments", "Staff salary"],
+            ["approve", "fact_check", "Leave approvals"],
+            ["balance", "event_available", "Leave balance"],
+            ["timetable", "schedule", "Timetable"],
+            ["holidays", "calendar_month", "Holiday calendar"],
+            ["exams", "quiz", "Exams"],
+            ["report", "description", "Report cards"],
+            ["admit", "badge", "Admit cards and seating"],
+            ["certs", "workspace_premium", "Certificates and TC"],
+            ["expenses", "account_balance", "Expenses and accounts"],
+            ["ptm", "forum", "Parent-teacher meetings"],
+            ["remind", "notifications_active", "Fee auto-reminders"],
+            ["reports", "bar_chart", "Reports"],
+            ["notices", "campaign", "Notices"],
+          ],
+        },
+        clerk: {
+          n: "Sub Admin / Clerk",
+          u: "clerk",
+          p: "clerk123",
+          nav: [
+            ["dash", "dashboard", "Dashboard"],
+            ["enq", "contact_phone", "Enquiries (CRM)"],
+            ["adm", "person_add", "New admission"],
+            ["stu", "school", "Students"],
+            ["fees", "receipt_long", "Fee collection"],
+            ["pend", "pending_actions", "Pending fees"],
+            ["feestruct", "request_quote", "Fee structure"],
+            ["remind", "notifications_active", "Fee auto-reminders"],
+            ["teachers", "groups", "Teachers"],
+            ["staffatt", "how_to_reg", "Staff attendance"],
+            ["certs", "workspace_premium", "Certificates and TC"],
+            ["admit", "badge", "Admit cards and seating"],
+            ["report", "description", "Report cards"],
+            ["expenses", "account_balance", "Expenses and accounts"],
+            ["holidays", "calendar_month", "Holiday calendar"],
+          ],
+        },
+        teacher: {
+          n: "Teacher",
+          u: "teacher",
+          p: "teacher123",
+          nav: [
+            ["dash", "dashboard", "Dashboard"],
+            ["punch", "fingerprint", "Punch in / out"],
+            ["att", "checklist", "Student attendance"],
+            ["marks", "edit_note", "Marks entry"],
+            ["notes", "upload_file", "Notes and homework"],
+            ["due", "currency_rupee", "Fees due (my class)"],
+            ["timetable", "schedule", "My timetable"],
+            ["ptm", "forum", "Parent-teacher meetings"],
+            ["holidays", "calendar_month", "Holiday calendar"],
+            ["leave", "beach_access", "Apply for leave"],
+            ["balance", "event_available", "Leave balance"],
+            ["slip", "payments", "My salary slip"],
+          ],
+        },
+      };
+      const toast = (t) => {
+        $("toast").textContent = t;
+        $("toast").classList.remove("hidden");
+        setTimeout(() => $("toast").classList.add("hidden"), 2400);
+      };
+      const ic = (n) => `<span class="material-symbols-outlined">${n}</span>`;
+      const stat = (i, l, x, c = "info") =>
+        `<div class="card flex items-center gap-3"><span class="tag ${c} !p-2 !rounded-xl">${ic(i)}</span><div><div class="hd text-xl font-semibold">${x}</div><div class="text-sm" style="color:var(--mut)">${l}</div></div></div>`;
+      const grid = (a) =>
+        `<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">${a.join("")}</div>`;
+      const tbl = (h, rows) =>
+        `<div class="card overflow-x-auto"><table><thead><tr>${h.map((x) => `<th>${x}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+      const T = (t, s = "") =>
+        `<h2 class="text-xl font-semibold mb-1">${t}</h2><p class="text-sm mb-4" style="color:var(--mut)">${s}</p>`;
+      const tag = (t, c) => `<span class="tag ${c}">${t}</span>`;
+      const fld = (id, l, t = "text", x = "") =>
+        `<div><label for="${id}">${l}</label><input id="${id}" type="${t}" value="${x}" class="inp"></div>`;
+      const sel = (id, l, o, ch = "") =>
+        `<div><label for="${id}">${l}</label><select id="${id}" class="inp" ${ch ? `onchange="${ch}"` : ""}>${o.map((x) => `<option>${x}</option>`).join("")}</select></div>`;
+      const btn = (l, i, f, c = "") =>
+        `<button class="btn ${c}" onclick="${f}">${ic(i)}${l}</button>`;
+      const wa = (m) => `https://wa.me/?text=${encodeURIComponent(m)}`;
+      const waB = (l, m) =>
+        `<a class="btn wa" target="_blank" rel="noopener" href="${wa(m)}">${ic("chat")}${l}</a>`;
+      const allC = () => CLS.flatMap((c) => secs[c].map((s) => c + " " + s));
+      const money = (n) => "₹" + n.toLocaleString("en-IN");
+      const today = "28 Oct 2026";
+      const head = () =>
+        `<div class="text-center border-b-2 pb-3 mb-4" style="border-color:#1d4ed8"><div style="width:54px;height:54px;border-radius:50%;background:#1d4ed8;color:#fff;display:inline-flex;align-items:center;justify-content:center;font:700 24px Poppins">${S.name[0]}</div><h2 style="font:700 22px Poppins;color:#1d4ed8;margin-top:6px">${S.name}</h2><div style="font-size:13px">${S.addr} | Phone: ${S.ph}</div><div style="font-size:12px;color:#444">${S.aff}</div></div>`;
+      const sign = (a = "Class Teacher", b = "Principal") =>
+        `<div style="display:flex;justify-content:space-between;margin-top:48px;font-size:13px"><span>${a}</span><span>${S.pr}<br>${b}</span></div>`;
+      function doc(h) {
+        $("doc").innerHTML =
+          `<div class="noprint max-w-3xl mx-auto mb-3 flex gap-2 justify-end">${btn("Print / Save as PDF", "print", "print()")}${btn("Close", "close", "$('doc').classList.add('hidden')", "b2")}</div><div class="paper">${head()}${h}</div>`;
+        $("doc").classList.remove("hidden");
+      }
+      const sRow = (k, x) =>
+        `<tr><td style="width:40%"><b>${k}</b></td><td>${x}</td></tr>`;
+      function tc(i) {
+        const s = stu[i];
+        s.st = "Left (TC issued)";
+        doc(
+          `<h3 style="text-align:center;font:600 18px Poppins;margin-bottom:12px">TRANSFER CERTIFICATE</h3><p style="font-size:13px;margin-bottom:8px">TC No: ${S.name
+            .split(" ")
+            .map((w) => w[0])
+            .join(
+              "",
+            )}/${S.ses.slice(0, 4)}/${s.no.slice(-3)} | Date of issue: ${today}</p><table>${sRow("Name of student", s.n)}${sRow("Father / Guardian", s.f)}${sRow("Admission number", s.no)}${sRow("Date of birth", s.dob)}${sRow("Date of admission", s.adm)}${sRow("Class last studied", s.c)}${sRow("Date of leaving", today)}${sRow("Fees paid up to", "October 2026")}${sRow("Dues pending", money(s.due))}${sRow("General conduct", "Good")}${sRow("Reason for leaving", "End of schooling / transfer")}</table><p style="margin-top:14px;font-size:13px">Certified that the above information is correct as per the school records.</p>${sign("Clerk", "Principal")}`,
+        );
+        if (page == "stu") go("stu");
+      }
+      function cert() {
+        const s = stu[+v("cs")],
+          t = v("ct");
+        if (t == "Transfer Certificate") return tc(+v("cs"));
+        const x =
+          t == "Bonafide Certificate" ?
+            `This is to certify that <b>${s.n}</b>, son/daughter of <b>${s.f}</b>, is a bonafide student of this school studying in class <b>${s.c}</b> in the session ${S.ses}. Admission No: ${s.no}.`
+          : `This is to certify that <b>${s.n}</b> (Admission No: ${s.no}) has studied in this school up to class ${s.c}. The conduct and character of the student have been good.`;
+        doc(
+          `<h3 style="text-align:center;font:600 18px Poppins;margin-bottom:14px">${t.toUpperCase()}</h3><p style="line-height:1.9;font-size:15px">${x}</p><p style="margin-top:12px;font-size:13px">Date: ${today}</p>${sign("Clerk", "Principal")}`,
+        );
+      }
+      function rc() {
+        const s = stu[+v("rs")],
+          m = subj.map((x, j) => [
+            x,
+            40 + ((+s.no.slice(-2) * 13 + j * 17) % 55),
+          ]),
+          tot = m.reduce((a, b) => a + b[1], 0),
+          pc = (tot / m.length).toFixed(1);
+        doc(
+          `<h3 style="text-align:center;font:600 18px Poppins">REPORT CARD | Half Yearly Exam ${S.ses}</h3><p style="font-size:13px;margin:10px 0">Name: <b>${s.n}</b> | Class: ${s.c} | Admission No: ${s.no}</p><table><tr><th>Subject</th><th>Marks (100)</th><th>Grade</th></tr>${m
+            .map(
+              (r) =>
+                `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${
+                  r[1] >= 80 ? "A"
+                  : r[1] >= 60 ? "B"
+                  : r[1] >= 45 ? "C"
+                  : "D"
+                }</td></tr>`,
+            )
+            .join(
+              "",
+            )}<tr><td><b>Total</b></td><td><b>${tot}/${m.length * 100}</b></td><td><b>${pc}%</b></td></tr></table><p style="margin-top:10px;font-size:13px">Result: <b>${pc >= 40 ? "PASS" : "FAIL"}</b> | Attendance: 91% | Remarks: Keep up the good work.</p>${sign("Class Teacher", "Principal")}`,
+        );
+      }
+      function adm(i) {
+        const s = stu[i],
+          ex = ["Hindi", "English", "Maths", "Science", "Social Sci."],
+          r = i + 1;
+        doc(
+          `<h3 style="text-align:center;font:600 18px Poppins">ADMIT CARD | Half Yearly Examination ${S.ses}</h3><p style="font-size:13px;margin:10px 0">Name: <b>${s.n}</b> | Class: ${s.c} | Roll No: ${r} | Adm No: ${s.no}<br>Exam room: Room ${Math.ceil(r / 20)} | Seat: B${r}</p><table><tr><th>Date</th><th>Subject</th><th>Time</th></tr>${ex.map((e, j) => `<tr><td>${10 + j * 2} Nov 2026</td><td>${e}</td><td>9:00 AM - 12:00 PM</td></tr>`).join("")}</table><p style="font-size:12px;margin-top:10px">Instructions: Carry this card daily. Report 15 minutes early. Mobile phones are not allowed. Fee dues must be cleared before the exam.</p>${sign("Class Teacher", "Principal")}`,
+        );
+      }
+      function slip(i) {
+        const t = tch[i],
+          ded = Math.round((t.sal / 26) * t.a);
+        doc(
+          `<h3 style="text-align:center;font:600 18px Poppins">SALARY SLIP | October 2026</h3><table style="margin-top:12px">${sRow("Employee", t.n)}${sRow("Designation / Subject", t.sub + " teacher")}${sRow("Working days", "26")}${sRow("Present / Paid leave / Absent", t.p + " / " + t.l + " / " + t.a)}${sRow("Basic salary", money(t.sal))}${sRow("Deduction for absence", money(ded))}${sRow("Net salary", `<b>${money(t.sal - ded)}</b>`)}</table>${sign("Accountant", "Principal")}`,
+        );
+      }
+      function receipt(n, s, items, total, mode) {
+        doc(
+          `<h3 style="text-align:center;font:600 18px Poppins">FEE RECEIPT #${n}</h3><p style="font-size:13px;margin:10px 0">Date: ${today} | Student: <b>${s.n}</b> (${s.c}) | Adm No: ${s.no} | Mode: ${mode}</p><table><tr><th>Particulars</th><th>Amount</th></tr>${items.map((i) => `<tr><td>${i[0]}</td><td>${money(i[1])}</td></tr>`).join("")}<tr><td><b>Total paid</b></td><td><b>${money(total)}</b></td></tr></table><p style="font-size:13px;margin-top:8px">Balance due: ${money(s.due)}</p>${sign("Received by", "Authorised signatory")}`,
+        );
+      }
+      const D = {
+        root: () =>
+          T("Dashboard", "Overview of all schools") +
+          grid([
+            stat("domain", "Total schools", "12"),
+            stat("verified", "Active", "10", "ok"),
+            stat("groups", "Total students", "3,420"),
+            stat("payments", "Income this month", "₹1.8 L", "warn"),
+          ]) +
+          tbl(
+            ["School", "City", "Students", "Plan", "Status"],
+            [
+              [
+                "Shree Vidya Public",
+                "Patna",
+                "420",
+                "Standard",
+                tag("Active", "ok"),
+              ],
+              [
+                "Little Stars School",
+                "Ranchi",
+                "260",
+                "Basic",
+                tag("Active", "ok"),
+              ],
+              [
+                "Gyan Jyoti Academy",
+                "Lucknow",
+                "610",
+                "Premium",
+                tag("Expires in 5 days", "warn"),
+              ],
+              [
+                "Sunrise Convent",
+                "Kanpur",
+                "180",
+                "Basic",
+                tag("Suspended", "bad"),
+              ],
+            ],
+          ),
+        admin: () =>
+          T("Dashboard", "Your whole school at a glance") +
+          grid([
+            stat(
+              "groups",
+              "Active students",
+              stu.filter((s) => s.st == "Active").length + 412,
+            ),
+            stat("co_present", "Teachers (present / on leave)", "24 / 2", "ok"),
+            stat("currency_rupee", "Collected today", money(38500), "ok"),
+            stat(
+              "pending_actions",
+              "Pending dues",
+              money(stu.reduce((a, s) => a + s.due, 0) * 12),
+              "bad",
+            ),
+            stat(
+              "contact_phone",
+              "New enquiries",
+              enq.filter((e) => e.st == "New").length,
+            ),
+            stat(
+              "fact_check",
+              "Pending leaves",
+              leaves.filter((l) => l[4] == "warn").length,
+              "warn",
+            ),
+            stat("how_to_reg", "Student attendance", "91%"),
+            stat("calendar_month", "Next holiday", "31 Oct"),
+          ]) +
+          `<div class="card"><h3 class="font-semibold mb-3">Attendance today by class</h3>${CLS.map(
+            (c, i) => {
+              const x = 82 + ((i * 7) % 17);
+              return `<div class="flex items-center gap-2 text-sm mb-1.5"><span class="w-10">${c}</span><div class="flex-1 h-2.5 rounded-full" style="background:var(--bd)"><div class="h-2.5 rounded-full" style="width:${x}%;background:var(--pri)"></div></div><span class="w-10 text-right">${x}%</span></div>`;
+            },
+          ).join("")}</div>`,
+        clerk: () =>
+          T("Dashboard", "Today’s work") +
+          grid([
+            stat(
+              "contact_phone",
+              "Follow-ups due today",
+              enq.filter((e) => e.fu == "2026-10-28").length,
+              "warn",
+            ),
+            stat("currency_rupee", "Collected today", money(38500), "ok"),
+            stat(
+              "pending_actions",
+              "Students with dues",
+              stu.filter((s) => s.due > 0).length,
+              "bad",
+            ),
+            stat("person_add", "Admissions this month", 18),
+          ]) +
+          `<div class="card"><h3 class="font-semibold mb-2">Follow-up reminders</h3>${enq
+            .filter((e) => e.fu == "2026-10-28")
+            .map(
+              (e) =>
+                `<div class="flex justify-between py-1.5"><span>${e.n} (${e.c}) ${e.mob}</span>${tag(e.st, "warn")}</div>`,
+            )
+            .join("")}</div>`,
+        teacher: () =>
+          T("Welcome, Mrs. Rekha", "Class teacher, 5th A") +
+          grid([
+            stat(
+              "fingerprint",
+              "Punch status",
+              punched ? "In " + punched : "Not yet",
+              "warn",
+            ),
+            stat("beach_access", "Casual leave left", "7"),
+            stat(
+              "checklist",
+              "Attendance today",
+              absent.size ? "Taken" : "Pending",
+              "bad",
+            ),
+            stat("edit_note", "Marks pending", "1 exam", "warn"),
+          ]) +
+          `<div class="card"><h3 class="font-semibold mb-2">Notices</h3><p>Diwali holiday begins 31 Oct. Parent-teacher meeting on 8 Nov at 10 AM.</p></div>`,
+      };
+      const P = {
+        dash: () => D[role](),
+        schools: () =>
+          T("Schools", "Add, edit or suspend a school") +
+          `<div class="card grid sm:grid-cols-2 gap-3 mb-4">${fld("a1", "School name")}${fld("a2", "City")}${fld("a3", "Admin name")}${fld("a4", "Admin mobile", "tel")}${sel("a5", "Plan", ["Basic", "Standard", "Premium"])}<div class="flex items-end">${btn("Create school", "add", "toast('School created and Admin login sent')")}</div></div>` +
+          tbl(
+            ["School", "Admin login", "Action"],
+            [
+              [
+                "Shree Vidya Public",
+                "admin@svps",
+                btn("Reset password", "key", "toast('Reset link sent')", "b2"),
+              ],
+              [
+                "Sunrise Convent",
+                "admin@sunrise",
+                btn("Activate", "check", "toast('School activated')", "b2"),
+              ],
+            ],
+          ),
+        modules: () =>
+          T("Modules", "Switch on only what each school needs") +
+          `<div class="grid sm:grid-cols-2 gap-3">${Object.keys(mods)
+            .map(
+              (k) =>
+                `<div class="card flex items-center justify-between"><span>${k}</span><button class="sw ${mods[k] ? "on" : ""}" aria-label="${k}" onclick="mods['${k}']^=1;go('modules')"></button></div>`,
+            )
+            .join("")}</div>`,
+        subs: () =>
+          T("Subscriptions", "Setup fee and monthly maintenance") +
+          tbl(
+            ["School", "Setup fee", "Per student / month", "Due", "Status"],
+            [
+              [
+                "Shree Vidya Public",
+                "₹40,000 paid",
+                "₹15",
+                "05 Nov",
+                tag("Paid", "ok"),
+              ],
+              [
+                "Gyan Jyoti Academy",
+                "₹40,000 paid",
+                "₹15",
+                "02 Nov",
+                tag("Due", "warn"),
+              ],
+              [
+                "Sunrise Convent",
+                "₹40,000 paid",
+                "₹15",
+                "10 Oct",
+                tag("Overdue: suspended", "bad"),
+              ],
+            ],
+          ),
+        log: () =>
+          T("Activity log", "Who changed what") +
+          tbl(
+            ["Time", "User", "Action"],
+            [
+              ["10:42", "clerk@svps", "Created fee receipt #1042"],
+              ["10:15", "admin@svps", "Approved leave (Mrs. Rekha)"],
+              ["09:50", "root", "Turned Library module ON"],
+              ["09:12", "teacher@svps", "Saved attendance for 5th A"],
+            ],
+          ),
+        settings: () =>
+          T(
+            "School settings",
+            "These details appear on the header, receipts, TC, report cards and admit cards",
+          ) +
+          `<div class="card grid sm:grid-cols-2 gap-3">${fld("s1", "School name", "text", S.name)}${fld("s2", "Address", "text", S.addr)}${fld("s3", "Phone", "text", S.ph)}${fld("s4", "Principal name", "text", S.pr)}${fld("s5", "Affiliation / board details", "text", S.aff)}${fld("s6", "Academic session", "text", S.ses)}<div>${btn("Save settings", "save", "saveS()")} ${btn("Preview TC header", "visibility", "doc('<p>Sample document header preview.</p>')", "b2")}</div></div>`,
+        setup: () =>
+          T(
+            "Class and section setup",
+            "LKG to 10th, with sections and subjects",
+          ) +
+          `<div class="card mb-3"><div class="flex flex-wrap gap-2">${CLS.map((c) => tag(c + ": " + secs[c].join(", "), "info")).join("")}</div><div class="grid sm:grid-cols-3 gap-3 mt-4">${sel("c1", "Class", CLS)}${fld("c2", "New section (e.g. C)")}<div class="flex items-end">${btn("Add section", "add", "addSec()")}</div></div></div><div class="card"><div class="flex flex-wrap gap-2 mb-3">${subj.map((s) => tag(s, "info")).join("")}</div><div class="grid sm:grid-cols-3 gap-3">${fld("c3", "New subject")}<div class="flex items-end">${btn("Add subject", "add", "subj.push(v('c3'));go('setup')")}</div></div></div>`,
+        feestruct: () =>
+          T("Fee structure", "Class-wise yearly and monthly fees") +
+          tbl(
+            [
+              "Class",
+              "Admission fee",
+              "Monthly tuition",
+              "Exam fee (per term)",
+            ],
+            fs.map((r) => [
+              r[0],
+              `<input class="inp !w-28" value="${r[1]}">`,
+              `<input class="inp !w-28" value="${r[2]}">`,
+              `<input class="inp !w-28" value="${r[3]}">`,
+            ]),
+          ) +
+          `<div class="mt-3">${role == "admin" ? btn("Save fee structure", "save", "toast('Fee structure saved')") : ""}</div><p class="text-sm mt-2" style="color:var(--mut)">Late fine, sibling discount and scholarships can be set up as rules.</p>`,
+        teachers: () =>
+          T("Teachers", "Add, remove and assign classes") +
+          `<div class="card grid sm:grid-cols-3 gap-3 mb-4">${fld("t1", "Full name")}${fld("t2", "Mobile", "tel")}${sel("t3", "Assign class", ["Not assigned", ...allC()])}${fld("t4", "Subject")}${fld("t5", "Monthly salary", "number", "20000")}<div class="flex items-end">${btn("Add teacher", "person_add", "addT()")}</div></div>` +
+          tbl(
+            ["Name", "Class", "Subject", "Mobile", "Action"],
+            tch.map((t, i) => [
+              t.n,
+              t.cls,
+              t.sub,
+              t.mob,
+              btn(
+                "Remove",
+                "delete",
+                `if(confirm('Remove ${t.n}?')){tch.splice(${i},1);satt.splice(${i},1);go('teachers')}`,
+                "bd",
+              ),
+            ]),
+          ),
+        staffatt: () =>
+          T(
+            "Staff attendance",
+            "Punch data from mobile or marked manually by the clerk",
+          ) +
+          tbl(
+            ["Teacher", "Punch in", "Status"],
+            tch.map((t, i) => [
+              t.n,
+              ["08:52", "09:31", "-", "-"][i] || "-",
+              `<select class="inp !w-36" onchange="satt[${i}]=this.value">${["Present", "Late", "Leave (CL)", "Absent"].map((o) => `<option ${satt[i] == o ? "selected" : ""}>${o}</option>`).join("")}</select>`,
+            ]),
+          ) +
+          `<div class="mt-3">${btn("Save attendance", "save", "toast('Staff attendance saved')")}</div><p class="text-sm mt-2" style="color:var(--mut)">Late rule: after 9:15 AM is marked Late.</p>`,
+        payroll: () =>
+          T(
+            "Staff salary",
+            "Calculated from attendance. Salary divided by 26 working days, per absent day deducted",
+          ) +
+          tbl(
+            [
+              "Staff",
+              "Salary",
+              "Present",
+              "Leave",
+              "Absent",
+              "Deduction",
+              "Net pay",
+              "",
+            ],
+            tch.map((t, i) => {
+              const d = Math.round((t.sal / 26) * t.a);
+              return [
+                t.n,
+                money(t.sal),
+                t.p,
+                t.l,
+                t.a,
+                money(d),
+                `<b>${money(t.sal - d)}</b>`,
+                btn("Slip", "receipt", `slip(${i})`, "b2"),
+              ];
+            }),
+          ) +
+          `<div class="mt-3 text-sm">Total payable: <b>${money(tch.reduce((a, t) => a + t.sal - Math.round((t.sal / 26) * t.a), 0))}</b></div>`,
+        approve: () =>
+          T("Leave approvals", "Staff leave requests") +
+          `<div class="space-y-3">${leaves.map((l, i) => `<div class="card flex flex-wrap items-center gap-3 justify-between"><div><b>${l[0]}</b> | ${l[1]} | ${l[2]}<div class="text-sm" style="color:var(--mut)">Reason: ${l[3]}</div></div>${l[4] == "warn" ? `<div class="flex gap-2">${btn("Approve", "check", `leaves[${i}][4]='ok';go('approve');toast('Approved. Balance updated.')`)}${btn("Reject", "close", `leaves[${i}][4]='bad';go('approve')`, "b2")}</div>` : tag(l[4] == "ok" ? "Approved" : "Rejected", l[4])}</div>`).join("")}</div>`,
+        balance: () =>
+          role == "admin" ?
+            T("Staff leave balance", "Everyone in one table") +
+            tbl(
+              ["Staff", "CL left", "SL left", "EL left"],
+              tch.map((t, i) => [t.n, 7 - i, 8 - (i % 3), 12 + (i % 3)]),
+            )
+          : T("My leave balance", "This academic year") +
+            tbl(
+              ["Type", "Total", "Taken", "Left"],
+              Object.entries(bal).map(([k, x]) => [
+                k,
+                x[0],
+                x[1],
+                tag(x[0] - x[1], "ok"),
+              ]),
+            ),
+        leave: () =>
+          T("Apply for leave", "Your request goes to the Admin") +
+          `<div class="card grid sm:grid-cols-2 gap-3">${sel("l1", "Leave type", ["Casual (CL)", "Sick (SL)", "Earned (EL)", "Half-day", "Unpaid"])}${fld("l2", "From", "date")}${fld("l3", "To", "date")}${fld("l4", "Reason")}<div>${btn("Submit request", "send", "leaves.unshift(['Mrs. Rekha Singh',v('l1').slice(-3,-1)||'CL',v('l2')||'TBD',v('l4')||'-','warn']);toast('Leave request sent')")}</div></div>`,
+        slip: () =>
+          T("My salary slip", "October 2026") +
+          `<div class="card">${btn("View salary slip", "receipt", "slip(0)")}</div>`,
+        timetable: () =>
+          T(
+            role == "teacher" ? "My timetable" : "Timetable",
+            "Class-wise weekly plan. Free teachers are suggested when someone is absent",
+          ) +
+          `<div class="mb-3 max-w-xs">${sel("tt", "Class", allC(), "go('timetable')")}</div><div class="card overflow-x-auto"><table><tr><th>Day</th>${[1, 2, 3, 4].map((p) => `<th>P${p}</th>`).join("")}<th>Lunch</th>${[5, 6].map((p) => `<th>P${p}</th>`).join("")}</tr>${[
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat",
+          ]
+            .map(
+              (d, r) =>
+                `<tr><td><b>${d}</b></td>${[0, 1, 2, 3]
+                  .map(
+                    (c) =>
+                      `<td>${
+                        subj[
+                          (r * 3 +
+                            c * 5 +
+                            (role == "teacher" ? 0
+                            : $("tt") ? $("tt").selectedIndex
+                            : 0)) %
+                            subj.length
+                        ]
+                      }</td>`,
+                  )
+                  .join(
+                    "",
+                  )}<td>${tag("Break", "warn")}</td>${[4, 5].map((c) => `<td>${subj[(r * 3 + c * 5) % subj.length]}</td>`).join("")}</tr>`,
+            )
+            .join("")}</table></div>` +
+          (role == "admin" ?
+            `<div class="card mt-4"><h3 class="font-semibold mb-2">Substitute teacher</h3><div class="grid sm:grid-cols-3 gap-3">${sel(
+              "sb1",
+              "Absent teacher",
+              tch.map((t) => t.n),
+            )}${sel("sb2", "Period", ["P1", "P2", "P3", "P4", "P5", "P6"])}<div class="flex items-end">${btn("Suggest substitute", "swap_horiz", "toast('Free teacher: '+tch[tch.length-1].n+' assigned for '+v('sb2'))")}</div></div></div>`
+          : ""),
+        holidays: () =>
+          T(
+            "Holiday calendar",
+            "Attendance is skipped automatically on holidays",
+          ) +
+          (role == "admin" ?
+            `<div class="card grid sm:grid-cols-4 gap-3 mb-4">${fld("h1", "Date", "date")}${fld("h2", "Holiday name")}${sel("h3", "Type", ["Festival", "School", "National"])}<div class="flex items-end">${btn("Add holiday", "add", "hol.push([v('h1'),v('h2'),v('h3')]);hol.sort();go('holidays')")}</div></div>`
+          : "") +
+          tbl(
+            ["Date", "Holiday", "Type"],
+            hol.map((h) => [h[0], h[1], tag(h[2], "info")]),
+          ),
+        enq: () =>
+          T(
+            "Enquiries (CRM)",
+            "Track every parent from first visit to admission",
+          ) +
+          `<div class="card grid sm:grid-cols-5 gap-3 mb-4">${fld("e1", "Child name")}${fld("e2", "Parent mobile", "tel")}${sel("e3", "Class", CLS)}${fld("e4", "Follow-up date", "date", "2026-10-30")}<div class="flex items-end">${btn("Add enquiry", "add", "enq.unshift({n:v('e1')||'New child',mob:v('e2'),c:v('e3'),fu:v('e4'),st:'New'});go('enq')")}</div></div>` +
+          tbl(
+            ["Child", "Mobile", "Class", "Follow-up", "Status", ""],
+            enq.map((e, i) => [
+              e.n,
+              e.mob,
+              e.c,
+              e.fu === "2026-10-28" ? tag(e.fu + " (today)", "warn") : e.fu,
+              `<select class="inp !w-36" onchange="enq[${i}].st=this.value">${["New", "Called", "Visited", "Interested", "Admitted", "Not interested"].map((o) => `<option ${e.st == o ? "selected" : ""}>${o}</option>`).join("")}</select>`,
+              btn("Admit", "person_add", "go('adm')", "b2"),
+            ]),
+          ),
+        adm: () =>
+          T(
+            "New admission",
+            "Complete the form, collect admission fee and first month fee, send welcome message",
+          ) +
+          `<div class="card grid sm:grid-cols-2 gap-3"><div class="sm:col-span-2 font-semibold">Student details</div>${fld("m1", "Student name")}${fld("m2", "Date of birth", "date")}${sel("m3", "Gender", ["Male", "Female"])}${sel("m4", "Class and section", allC())}${fld("m5", "Father’s name")}${fld("m6", "Mother’s name")}${fld("m7", "Parent mobile (WhatsApp)", "tel")}${fld("m8", "Address")}${fld("m9", "Previous school")}${fld("m10", "Last class passed")}<div class="sm:col-span-2 font-semibold mt-2">Documents</div>${fld("d1", "Aadhaar card", "file")}${fld("d2", "Birth certificate", "file")}${fld("d3", "Transfer certificate", "file")}<div class="sm:col-span-2 font-semibold mt-2">Fees at admission</div>${fld("m11", "Admission fee", "number", "3000")}${fld("m12", "First month fee", "number", "1100")}${sel("m13", "Payment mode", ["Cash", "UPI", "Cheque"])}<div class="sm:col-span-2">${btn("Confirm admission", "check", "doAdm()")}</div></div><div id="ok" class="mt-4"></div>`,
+        stu: () =>
+          T(
+            "Students",
+            "Students are never deleted. Issuing a TC marks them as Left",
+          ) +
+          tbl(
+            ["Adm no.", "Name", "Class", "Parent mobile", "Status", "Actions"],
+            stu.map((s, i) => [
+              s.no,
+              s.n,
+              s.c,
+              s.mob,
+              tag(s.st, s.st == "Active" ? "ok" : "bad"),
+              btn("Profile", "person", `prof(${i})`, "b2") +
+                " " +
+                (s.st == "Active" ?
+                  btn("Issue TC", "description", `tc(${i})`)
+                : btn("View TC", "description", `tc(${i})`, "b2")),
+            ]),
+          ),
+        fees: () =>
+          T("Fee collection", "Full or partial payment, with discount") +
+          `<div class="card grid sm:grid-cols-2 gap-3">${sel(
+            "f1",
+            "Student",
+            stu
+              .filter((s) => s.st == "Active")
+              .map((s) => s.n + " (" + s.no + ")"),
+            "$('fd').textContent=money(stu[$('f1').selectedIndex].due)",
+          )}<div><label>Total due</label><div id="fd" class="hd text-2xl font-semibold" style="color:var(--bad)">${money(stu[0].due)}</div></div>${fld("f2", "Amount paying now", "number", "2000")}${fld("f3", "Discount", "number", "0")}${sel("f4", "Mode", ["Cash", "UPI", "Cheque"])}<div class="flex items-end">${btn("Collect and make receipt", "receipt", "payFee()")}</div></div>`,
+        pend: () =>
+          T(
+            role == "teacher" ? "Fees due (5th A)" : "Pending fees",
+            "Largest dues first",
+          ) +
+          tbl(
+            ["Student", "Class", "Due", "Reminder"],
+            stu
+              .filter((s) => s.due > 0)
+              .sort((a, b) => b.due - a.due)
+              .map((s) => [
+                s.n,
+                s.c,
+                tag(money(s.due), "bad"),
+                waB(
+                  "WhatsApp",
+                  `Dear Parent, fee of ${money(s.due)} for ${s.n} is pending. Please pay at the earliest. - ${S.name}`,
+                ),
+              ]),
+          ),
+        due: () => P.pend(),
+        remind: () =>
+          T(
+            "Fee auto-reminders",
+            "Messages go out by themselves, no clerk needed",
+          ) +
+          `<div class="card space-y-3 mb-4">${["3 days before the due date", "On the due date", "7 days after the due date"].map((r, i) => `<div class="flex items-center justify-between"><span>${r}</span><button class="sw ${rem[i] ? "on" : ""}" aria-label="${r}" onclick="rem[${i}]^=1;go('remind')"></button></div>`).join("")}</div><div class="card"><label for="rt">Message template</label><textarea id="rt" class="inp" rows="3">Dear Parent, fee of {amount} for {student} is due on {date}. Please pay at the earliest. - ${S.name}</textarea><div class="mt-3 flex gap-2 flex-wrap">${btn("Save template", "save", "toast('Template saved')")}${btn("Send to all with dues now", "send", `toast('${stu.filter((s) => s.due > 0).length} reminders queued')`, "b2")}</div></div>`,
+        certs: () =>
+          T(
+            "Certificates and TC",
+            "Generated instantly with the school name from settings",
+          ) +
+          `<div class="card grid sm:grid-cols-3 gap-3">${sel(
+            "cs",
+            "Student",
+            stu.map((s) => s.n + " (" + s.no + ")"),
+          )}${sel("ct", "Certificate", ["Transfer Certificate", "Bonafide Certificate", "Character Certificate"])}<div class="flex items-end">${btn("Generate", "workspace_premium", "cert()")}</div></div>`,
+        exams: () =>
+          T("Exams", "Schedule and track exams") +
+          tbl(
+            ["Exam", "Dates", "Classes", "Status"],
+            [
+              ["Unit Test 2", "12-16 Oct", "All", tag("Marks entered", "ok")],
+              ["Half Yearly", "10-20 Nov", "All", tag("Scheduled", "info")],
+              ["Annual", "Mar 2027", "All", tag("Not scheduled", "warn")],
+            ],
+          ),
+        report: () =>
+          T("Report cards", "Select a student and generate a printable PDF") +
+          `<div class="card grid sm:grid-cols-3 gap-3">${sel(
+            "rs",
+            "Student",
+            stu.map((s) => s.n + " (" + s.no + ")"),
+          )}${sel("rx", "Exam", ["Half Yearly", "Unit Test 2"])}<div class="flex items-end">${btn("Generate report card", "description", "rc()")}</div></div>`,
+        admit: () =>
+          T(
+            "Admit cards and seating plan",
+            "Print admit cards for the Half Yearly exam",
+          ) +
+          tbl(
+            ["Roll", "Student", "Class", "Room / Seat", ""],
+            stu.map((s, i) => [
+              i + 1,
+              s.n,
+              s.c,
+              "Room " + Math.ceil((i + 1) / 4) + " / B" + (i + 1),
+              btn("Admit card", "badge", `adm(${i})`, "b2"),
+            ]),
+          ) +
+          `<div class="card mt-4"><h3 class="font-semibold mb-2">Seating plan: Room 1</h3><div class="grid grid-cols-2 sm:grid-cols-4 gap-2">${stu
+            .slice(0, 4)
+            .map(
+              (s, i) =>
+                `<div class="rounded-xl p-3 text-sm" style="background:var(--soft)"><b>B${i + 1}</b><br>${s.n}<br>${s.c}</div>`,
+            )
+            .join("")}</div></div>`,
+        expenses: () => {
+          const e = exp.reduce((a, x) => a + x[3], 0);
+          return (
+            T(
+              "Expenses and accounts",
+              "Income comes from fee receipts automatically",
+            ) +
+            grid([
+              stat("trending_up", "Income this month", money(inc), "ok"),
+              stat("trending_down", "Expenses", money(e), "bad"),
+              stat("savings", "Net balance", money(inc - e)),
+              stat("receipt_long", "Receipts issued", rno - 1000),
+            ]) +
+            `<div class="card grid sm:grid-cols-5 gap-3 mb-4">${fld("x1", "Date", "date")}${fld("x2", "Details")}${sel("x3", "Category", ["Utilities", "Supplies", "Transport", "Salary", "Repairs", "Other"])}${fld("x4", "Amount", "number")}<div class="flex items-end">${btn("Add expense", "add", "exp.unshift([v('x1')||'2026-10-28',v('x2'),v('x3'),+v('x4')||0]);go('expenses')")}</div></div>` +
+            tbl(
+              ["Date", "Details", "Category", "Amount"],
+              exp.map((x) => [x[0], x[1], x[2], money(x[3])]),
+            )
+          );
+        },
+        ptm: () =>
+          T("Parent-teacher meetings", "Record what was discussed") +
+          `<div class="card grid sm:grid-cols-3 gap-3 mb-4">${fld("p1", "Date", "date")}${sel("p2", "Class", allC())}${fld("p3", "Topic")}${fld("p4", "Parents attended")}${fld("p5", "Notes")}<div class="flex items-end">${btn("Save record", "save", "ptm.unshift([v('p1')||'2026-10-28',v('p2'),v('p3'),v('p4'),v('p5')]);go('ptm')")} </div></div>` +
+          tbl(["Date", "Class", "Topic", "Attended", "Notes"], ptm),
+        reports: () =>
+          T("Reports", "Download as PDF") +
+          `<div class="grid sm:grid-cols-2 gap-3">${["Fee collection", "Pending dues", "Attendance", "Result analysis", "Admission and enquiry", "Staff attendance"].map((r) => `<div class="card flex items-center justify-between">${r}${btn("PDF", "download", `toast('${r} report ready')`, "b2")}</div>`).join("")}</div>`,
+        notices: () =>
+          T("Notice board", "Post once, send to every parent on WhatsApp") +
+          `<div class="card grid gap-3">${fld("n1", "Notice", "text", "School will remain closed on 31 Oct for Diwali.")}<div class="flex gap-2 flex-wrap">${btn("Post notice", "campaign", "toast('Notice posted')")}<a class="btn wa" target="_blank" rel="noopener" href="${wa("Notice: Diwali holidays from 31 Oct. - " + S.name)}">${ic("chat")}Send to all parents</a></div></div>`,
+        punch: () =>
+          T("Punch in / out", "Location is checked against the school") +
+          `<div class="card text-center"><div class="hd text-4xl font-semibold mb-1" id="clk"></div><p class="text-sm mb-4" style="color:var(--mut)">Inside school area (demo)</p>${btn(punched ? "Punch out" : "Punch in", "fingerprint", "punch()")}<p class="mt-3">${punched ? "Punched in at " + punched : "Not punched in yet"}</p></div>`,
+        att: () =>
+          T(
+            "Student attendance",
+            "Class 5th A. Everyone is present by default, tap to mark absent",
+          ) +
+          `<div class="card"><div class="grid sm:grid-cols-2 gap-2">${stu.map((s, i) => `<button class="flex items-center justify-between rounded-xl p-3 border" style="border-color:var(--bd);background:${absent.has(i) ? "var(--badBg)" : "var(--okBg)"};color:var(--tx)" onclick="absent.has(${i})?absent.delete(${i}):absent.add(${i});go('att')"><span>${s.n}</span><b style="color:${absent.has(i) ? "var(--bad)" : "var(--ok)"}">${absent.has(i) ? "Absent" : "Present"}</b></button>`).join("")}</div><div class="mt-4 flex flex-wrap gap-2 items-center"><span>Present ${stu.length - absent.size} | Absent ${absent.size}</span>${btn("Save", "save", "toast('Attendance saved')")}${waB("Send monthly attendance", `Dear Parent, Aarav attended 24 of 26 days this month. - Mrs. Rekha, 5th A, ${S.name}`)}</div></div>`,
+        marks: () =>
+          T("Marks entry", "Unit Test 2, Maths (out of 50)") +
+          `<div class="card"><table>${stu.map((s, i) => `<tr><td>${s.n}</td><td><input type="number" class="inp !w-24" value="${30 + ((i * 7) % 20)}"></td></tr>`).join("")}</table><div class="mt-3 flex gap-2 flex-wrap">${btn("Save marks", "save", "toast('Marks saved')")}${waB("Send results", "Result: Unit Test 2, Maths 42/50. - Mrs. Rekha")}</div></div>`,
+        notes: () =>
+          T("Notes and homework", "Upload and share with parents on WhatsApp") +
+          `<div class="card grid gap-3">${fld("w1", "Title", "text", "Maths Chapter 4 homework")}${fld("w2", "File (PDF or photo)", "file")}<div class="flex gap-2 flex-wrap">${btn("Upload", "upload", "toast('Uploaded')")}${waB("Share on WhatsApp", "Homework: Maths Chapter 4, Q1 to Q10. - Mrs. Rekha")}</div></div>`,
+      };
+      function prof(i) {
+        const s = stu[i];
+        doc(
+          `<h3 style="font:600 18px Poppins;margin-bottom:10px">Student profile</h3><table>${sRow("Name", s.n)}${sRow("Admission no.", s.no)}${sRow("Class", s.c)}${sRow("Father", s.f)}${sRow("Mobile", s.mob)}${sRow("Date of birth", s.dob)}${sRow("Status", s.st)}${sRow("Fee due", money(s.due))}</table>`,
+        );
+      }
+      function saveS() {
+        S.name = v("s1");
+        S.addr = v("s2");
+        S.ph = v("s3");
+        S.pr = v("s4");
+        S.aff = v("s5");
+        S.ses = v("s6");
+        $("school").textContent = S.name;
+        toast("Settings saved. All documents now use these details.");
+      }
+      function addSec() {
+        const c = v("c1"),
+          s = v("c2").trim().toUpperCase();
+        if (s && !secs[c].includes(s)) secs[c].push(s);
+        go("setup");
+      }
+      function addT() {
+        tch.push({
+          n: v("t1") || "New teacher",
+          cls: v("t3"),
+          sub: v("t4") || "-",
+          mob: v("t2"),
+          sal: +v("t5") || 20000,
+          p: 0,
+          l: 0,
+          a: 0,
+        });
+        satt.push("Present");
+        go("teachers");
+      }
+      function doAdm() {
+        const n = v("m1") || "New Student",
+          a = +v("m11"),
+          b = +v("m12"),
+          no = "SVPS-" + (101 + stu.length),
+          s = {
+            no,
+            n,
+            c: v("m4"),
+            f: v("m5") || "-",
+            mob: v("m7"),
+            dob: v("m2"),
+            adm: today,
+            st: "Active",
+            due: 0,
+            addr: v("m8"),
+            prev: v("m9"),
+          };
+        stu.push(s);
+        inc += a + b;
+        rno++;
+        $("ok").innerHTML =
+          `<div class="card"><b>Admission done. Admission number: ${no}</b><p class="text-sm my-2" style="color:var(--mut)">${n} is in ${s.c}. Fees collected: ${money(a + b)}.</p><div class="flex gap-2 flex-wrap">${btn("Print receipt", "receipt", `receipt(${rno - 1},stu[${stu.length - 1}],[['Admission fee',${a}],['First month fee',${b}]],${a + b},'${v("m13")}')`, "b2")}${waB("Send welcome message", `Welcome to ${S.name}! ${n} is admitted to ${s.c}. Admission No: ${no}. We are happy to have you.`)}</div></div>`;
+      }
+      function payFee() {
+        const i = $("f1").selectedIndex,
+          s = stu.filter((x) => x.st == "Active")[i],
+          a = +v("f2") || 0,
+          d = +v("f3") || 0;
+        s.due = Math.max(0, s.due - a - d);
+        inc += a;
+        rno++;
+        receipt(
+          rno - 1,
+          s,
+          [["Tuition fee", a], ...(d ? [["Discount (not paid)", d]] : [])],
+          a,
+          v("f4"),
+        );
+        $("fd").textContent = money(s.due);
+      }
+      function punch() {
+        punched =
+          punched ? null : (
+            new Date().toLocaleTimeString("en-IN", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          );
+        toast(punched ? "Punched in" : "Punched out");
+        go("punch");
+      }
+      function go(p) {
+        page = p;
+        $("main").innerHTML = (P[p] || (() => T("Coming soon")))();
+        document
+          .querySelectorAll(".nav")
+          .forEach((b) => b.classList.toggle("on", b.dataset.p == p));
+        if (innerWidth < 768) side.classList.add("hidden");
+        clearInterval(window.iv);
+        if (p == "punch") {
+          const t = () => {
+            const c = $("clk");
+            if (c) c.textContent = new Date().toLocaleTimeString("en-IN");
+          };
+          window.iv = setInterval(t, 1000);
+          t();
+        }
+      }
+      function logout() {
+        $("app").classList.add("hidden");
+        $("login").classList.remove("hidden");
+        $("p").value = "";
+        $("err").classList.add("hidden");
+      }
+      $("roleBtns").innerHTML = Object.keys(R)
+        .map(
+          (k) =>
+            `<button class="btn b2 justify-center" onclick="u.value='${R[k].u}';p.value='${R[k].p}'">${R[k].n}</button>`,
+        )
+        .join("");
+      // ===== v3: access control, pagination, filters, student records =====
+      const ALL = [
+        ["dash", "dashboard", "Dashboard"],
+        ["search", "manage_search", "Student records"],
+        ["enq", "contact_phone", "Enquiries (CRM)"],
+        ["adm", "person_add", "New admission"],
+        ["stu", "school", "Students"],
+        ["certs", "workspace_premium", "Certificates and TC"],
+        ["admit", "badge", "Admit cards and seating"],
+        ["report", "description", "Report cards"],
+        ["exams", "quiz", "Exams"],
+        ["att", "checklist", "Student attendance"],
+        ["marks", "edit_note", "Marks entry"],
+        ["notes", "upload_file", "Notes and homework"],
+        ["fees", "receipt_long", "Fee collection"],
+        ["pend", "pending_actions", "Pending fees"],
+        ["due", "currency_rupee", "Fees due (my class)"],
+        ["feestruct", "request_quote", "Fee structure"],
+        ["remind", "notifications_active", "Fee auto-reminders"],
+        ["expenses", "account_balance", "Expenses and accounts"],
+        ["teachers", "groups", "Teachers"],
+        ["staffatt", "how_to_reg", "Staff attendance"],
+        ["payroll", "payments", "Staff salary"],
+        ["approve", "fact_check", "Leave approvals"],
+        ["balance", "event_available", "Leave balance"],
+        ["leave", "beach_access", "Apply for leave"],
+        ["slip", "request_page", "My salary slip"],
+        ["punch", "fingerprint", "Punch in / out"],
+        ["timetable", "schedule", "Timetable"],
+        ["holidays", "calendar_month", "Holiday calendar"],
+        ["ptm", "forum", "Parent-teacher meetings"],
+        ["notices", "campaign", "Notices"],
+        ["reports", "bar_chart", "Reports"],
+        ["setup", "tune", "Class and section setup"],
+        ["settings", "settings", "School settings"],
+        ["access", "admin_panel_settings", "Access control"],
+      ];
+      const GRP = {
+        dash: "Main",
+        search: "Main",
+        schools: "Platform",
+        modules: "Platform",
+        subs: "Platform",
+        log: "Platform",
+        enq: "Admissions",
+        adm: "Admissions",
+        stu: "Students",
+        certs: "Students",
+        att: "Students",
+        notes: "Students",
+        admit: "Exams",
+        report: "Exams",
+        exams: "Exams",
+        marks: "Exams",
+        fees: "Fees and accounts",
+        pend: "Fees and accounts",
+        due: "Fees and accounts",
+        feestruct: "Fees and accounts",
+        remind: "Fees and accounts",
+        expenses: "Fees and accounts",
+        teachers: "Staff and HR",
+        staffatt: "Staff and HR",
+        payroll: "Staff and HR",
+        approve: "Staff and HR",
+        balance: "Staff and HR",
+        leave: "Staff and HR",
+        slip: "Staff and HR",
+        punch: "Staff and HR",
+        timetable: "School",
+        holidays: "School",
+        ptm: "School",
+        notices: "School",
+        reports: "School",
+        setup: "Setup",
+        settings: "Setup",
+        access: "Setup",
+      };
+      const PERM = {
+        clerk: new Set(
+          "dash,search,enq,adm,stu,fees,pend,feestruct,remind,teachers,staffatt,certs,admit,report,expenses,holidays".split(
+            ",",
+          ),
+        ),
+        teacher: new Set(
+          "dash,search,punch,att,marks,notes,due,timetable,ptm,holidays,leave,balance,slip".split(
+            ",",
+          ),
+        ),
+      };
+      const NOGRANT = ["dash", "settings", "access"];
+      R.admin.nav = ALL.filter(
+        (p) =>
+          !["punch", "leave", "slip", "due", "att", "marks", "notes"].includes(
+            p[0],
+          ),
+      );
+      const navFor = (r) =>
+        r == "root" ?
+          R.root.nav
+        : (r == "admin" ?
+            R.admin.nav
+          : ALL.filter((p) => PERM[r].has(p[0]))
+          ).filter((p) => modOn(p[0]));
+      function buildNav() {
+        const g = {};
+        navFor(role).forEach((n) =>
+          (g[GRP[n[0]]] = g[GRP[n[0]]] || []).push(n),
+        );
+        $("nav").innerHTML =
+          [
+            "Main",
+            "Platform",
+            "Admissions",
+            "Students",
+            "Exams",
+            "Fees and accounts",
+            "Staff and HR",
+            "School",
+            "Setup",
+          ]
+            .filter((k) => g[k])
+            .map(
+              (k) =>
+                `<details open class="mb-1"><summary class="px-3 py-1.5 text-xs font-semibold uppercase tracking-wide cursor-pointer select-none" style="color:var(--mut)">${k}</summary>${g[k].map((n) => `<button class="nav" data-p="${n[0]}" onclick="go('${n[0]}')">${ic(n[1])}${n[2]}</button>`).join("")}</details>`,
+            )
+            .join("") + '<div class="h-16"></div>';
+      }
+      [
+        "Isha Kapoor",
+        "Vihaan Roy",
+        "Tara Nair",
+        "Dev Malhotra",
+        "Kiara Joshi",
+        "Arjun Reddy",
+        "Pari Saxena",
+        "Reyansh Jain",
+        "Mira Choudhary",
+        "Lakshya Bose",
+      ].forEach((n, k) =>
+        stu.push({
+          no: "SVPS-" + (109 + k),
+          n,
+          c: [
+            "3rd A",
+            "3rd B",
+            "8th B",
+            "LKG A",
+            "10th A",
+            "6th A",
+            "UKG B",
+            "7th A",
+            "9th B",
+            "2nd A",
+          ][k],
+          f: "Mr. " + n.split(" ")[1] + " Sr.",
+          mob: "98xxxxxx" + (20 + k),
+          dob: 5 + k + " Jun 201" + (k % 8),
+          adm: "0" + (1 + (k % 9)) + " Apr 202" + (k % 4),
+          st: k == 9 ? "Left (TC issued)" : "Active",
+          due: [0, 2200, 1100, 3300, 0, 5400, 0, 1100, 0, 0][k],
+          addr: "Flat " + (3 + k) + ", Kankarbagh, Patna",
+          prev: [
+            "None (first school)",
+            "City Montessori",
+            "Little Angels",
+            "None (first school)",
+            "DAV Public School",
+            "St. Xavier",
+            "None (first school)",
+            "Bright Future Academy",
+            "Sunrise Kids",
+            "Tiny Tots",
+          ][k],
+        }),
+      );
+      const DT = {};
+      const rw = (c, k, cls, f2) => ({
+        c,
+        k: (k || "").toLowerCase(),
+        cls: cls || "",
+        f2: f2 || "",
+      });
+      const sTxt = (s) =>
+        [
+          s.no,
+          s.n,
+          s.c,
+          s.f,
+          s.mob,
+          s.dob,
+          s.adm,
+          s.addr || "",
+          s.prev || "",
+          s.st,
+        ]
+          .join(" ")
+          .toLowerCase();
+      function dt(id, head, get, o = {}) {
+        const d = (DT[id] = Object.assign(
+          { pg: 1, q: "", cl: "All", sc: "All", f2: "All", per: o.per || 5 },
+          DT[id] || {},
+          { head, get, o },
+        ));
+        const op = (a, c, al) =>
+          `<option value="All">${al}</option>` +
+          a
+            .map((x) => `<option ${c == x ? "selected" : ""}>${x}</option>`)
+            .join("");
+        return `<div class="card mb-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4 items-end"><div><label for="q_${id}">Search</label><input id="q_${id}" class="inp" placeholder="${o.ph || "Search by ID, name, mobile..."}" value="${d.q}" oninput="dtf('${id}','q',this.value)"></div>${o.cls ? `<div><label>Class</label><select class="inp" onchange="dtf('${id}','cl',this.value)">${op(CLS, d.cl, "All classes")}</select></div>` : ""}${o.cls == 1 ? `<div><label>Section</label><select class="inp" onchange="dtf('${id}','sc',this.value)">${op(["A", "B", "C"], d.sc, "All sections")}</select></div>` : ""}${o.f2 ? `<div><label>${o.f2[0]}</label><select class="inp" onchange="dtf('${id}','f2',this.value)">${op(o.f2[1], d.f2, "All")}</select></div>` : ""}</div><div id="dtb_${id}">${dtBody(id)}</div>`;
+      }
+      function dtBody(id) {
+        const d = DT[id],
+          q = d.q.trim().toLowerCase(),
+          r = d
+            .get()
+            .filter(
+              (x) =>
+                (!q || x.k.includes(q)) &&
+                (d.cl == "All" || !x.cls || x.cls.split(" ")[0] == d.cl) &&
+                (d.sc == "All" ||
+                  !x.cls ||
+                  !x.cls.split(" ")[1] ||
+                  x.cls.split(" ")[1] == d.sc) &&
+                (d.f2 == "All" || !x.f2 || x.f2 == d.f2),
+            ),
+          n = r.length,
+          pp = Math.max(1, Math.ceil(n / d.per));
+        d.pg = Math.min(d.pg, pp);
+        const s = (d.pg - 1) * d.per;
+        return `<div class="card overflow-x-auto"><table><thead><tr>${d.head.map((h) => `<th>${h}</th>`).join("")}</tr></thead><tbody>${
+          r
+            .slice(s, s + d.per)
+            .map((x) => `<tr>${x.c.map((c) => `<td>${c}</td>`).join("")}</tr>`)
+            .join("") ||
+          `<tr><td colspan="${d.head.length}" style="color:var(--mut)">No records found</td></tr>`
+        }</tbody></table></div><div class="flex flex-wrap items-center justify-between gap-2 mt-3 text-sm"><span style="color:var(--mut)">${n ? s + 1 : 0}-${Math.min(s + d.per, n)} of ${n}</span><div class="flex items-center gap-1"><button class="btn b2" ${d.pg < 2 ? "disabled" : ""} onclick="dtp('${id}',${d.pg - 1})" aria-label="Previous page">${ic("chevron_left")}</button><span class="px-2">Page ${d.pg} of ${pp}</span><button class="btn b2" ${d.pg >= pp ? "disabled" : ""} onclick="dtp('${id}',${d.pg + 1})" aria-label="Next page">${ic("chevron_right")}</button><select class="inp !w-auto" onchange="dtf('${id}','per',+this.value)" aria-label="Rows per page">${[5, 10, 20, 50].map((x) => `<option value="${x}" ${d.per == x ? "selected" : ""}>${x} / page</option>`).join("")}</select></div></div>`;
+      }
+      function dtf(id, k, x) {
+        DT[id][k] = x;
+        DT[id].pg = 1;
+        $("dtb_" + id).innerHTML = dtBody(id);
+      }
+      function dtp(id, p) {
+        DT[id].pg = p;
+        $("dtb_" + id).innerHTML = dtBody(id);
+      }
+      const stClr = (s) => tag(s.st, s.st == "Active" ? "ok" : "bad"),
+        stF = (s) => (s.st == "Active" ? "Active" : "Left"),
+        STAT = ["Status", ["Active", "Left"]];
+      const rwS = (s, i) =>
+        rw(
+          [
+            s.no,
+            s.n,
+            s.c,
+            s.mob,
+            stClr(s),
+            btn("Record", "folder_shared", `openRec(${i})`, "b2") +
+              " " +
+              (s.st == "Active" ?
+                btn("Issue TC", "description", `tc(${i})`)
+              : btn("View TC", "description", `tc(${i})`, "b2")),
+          ],
+          sTxt(s),
+          s.c,
+          stF(s),
+        );
+      let selStu = null;
+      const act = () => stu.filter((s) => s.st == "Active");
+      Object.assign(P, {
+        stu: () =>
+          T(
+            "Students",
+            "Filter by class and section, or search by ID, name or mobile. Issuing a TC marks the student as Left",
+          ) +
+          dt(
+            "stu",
+            ["Adm no.", "Name", "Class", "Parent mobile", "Status", "Actions"],
+            () => stu.map(rwS),
+            { cls: 1, f2: STAT },
+          ),
+        search: () =>
+          selStu !== null ?
+            recHtml(selStu)
+          : T(
+              "Student records",
+              "Search any detail: name, admission number, mobile, parent, address, class or previous school. Open a student to see the complete record",
+            ) +
+            dt(
+              "srch",
+              [
+                "Adm no.",
+                "Name",
+                "Class",
+                "Father",
+                "Mobile",
+                "Admitted",
+                "Status",
+                "",
+              ],
+              () =>
+                stu.map((s, i) =>
+                  rw(
+                    [
+                      s.no,
+                      s.n,
+                      s.c,
+                      s.f,
+                      s.mob,
+                      s.adm,
+                      stClr(s),
+                      btn("Open full record", "folder_shared", `openRec(${i})`),
+                    ],
+                    sTxt(s),
+                    s.c,
+                    stF(s),
+                  ),
+                ),
+              {
+                cls: 1,
+                f2: STAT,
+                ph: "Name, ID, mobile, parent, address, class...",
+              },
+            ),
+        enq: () =>
+          T(
+            "Enquiries (CRM)",
+            "Track every parent from first visit to admission",
+          ) +
+          `<div class="card grid sm:grid-cols-5 gap-3 mb-4">${fld("e1", "Child name")}${fld("e2", "Parent mobile", "tel")}${sel("e3", "Class", CLS)}${fld("e4", "Follow-up date", "date", "2026-10-30")}<div class="flex items-end">${btn("Add enquiry", "add", "enq.unshift({n:v('e1')||'New child',mob:v('e2'),c:v('e3'),fu:v('e4'),st:'New'});go('enq')")}</div></div>` +
+          dt(
+            "enq",
+            ["Child", "Mobile", "Class", "Follow-up", "Status", ""],
+            () =>
+              enq.map((e, i) =>
+                rw(
+                  [
+                    e.n,
+                    e.mob,
+                    e.c,
+                    e.fu === "2026-10-28" ?
+                      tag(e.fu + " (today)", "warn")
+                    : e.fu,
+                    `<select class="inp !w-36" onchange="enq[${i}].st=this.value">${["New", "Called", "Visited", "Interested", "Admitted", "Not interested"].map((o) => `<option ${e.st == o ? "selected" : ""}>${o}</option>`).join("")}</select>`,
+                    btn("Admit", "person_add", "go('adm')", "b2"),
+                  ],
+                  e.n + " " + e.mob + " " + e.c,
+                  e.c,
+                  e.st,
+                ),
+              ),
+            {
+              cls: 2,
+              f2: [
+                "Status",
+                [
+                  "New",
+                  "Called",
+                  "Visited",
+                  "Interested",
+                  "Admitted",
+                  "Not interested",
+                ],
+              ],
+            },
+          ),
+        pend: () =>
+          T(
+            role == "teacher" ? "Fees due (5th A)" : "Pending fees",
+            "Largest dues first. Filter by class",
+          ) +
+          dt(
+            "pend",
+            ["Student", "Class", "Due", "Reminder"],
+            () =>
+              act()
+                .filter(
+                  (s) => s.due > 0 && (role != "teacher" || s.c == "5th A"),
+                )
+                .sort((a, b) => b.due - a.due)
+                .map((s) =>
+                  rw(
+                    [
+                      s.n,
+                      s.c,
+                      tag(money(s.due), "bad"),
+                      waB(
+                        "WhatsApp",
+                        `Dear Parent, fee of ${money(s.due)} for ${s.n} is pending. Please pay at the earliest. - ${S.name}`,
+                      ),
+                    ],
+                    sTxt(s),
+                    s.c,
+                  ),
+                ),
+            { cls: 1 },
+          ),
+        due: () => P.pend(),
+        fees: () =>
+          T("Fee collection", "Full or partial payment, with discount") +
+          `<div class="card grid sm:grid-cols-2 gap-3">${sel(
+            "f1",
+            "Student",
+            act().map((s) => s.n + " (" + s.no + ", " + s.c + ")"),
+            "$('fd').textContent=money(act()[$('f1').selectedIndex].due)",
+          )}<div><label>Total due</label><div id="fd" class="hd text-2xl font-semibold" style="color:var(--bad)">${money(act()[0].due)}</div></div>${fld("f2", "Amount paying now", "number", "2000")}${fld("f3", "Discount", "number", "0")}${sel("f4", "Mode", ["Cash", "UPI", "Cheque"])}<div class="flex items-end">${btn("Collect and make receipt", "receipt", "payFee()")}</div></div>`,
+        teachers: () =>
+          T("Teachers", "Add, remove and assign classes") +
+          `<div class="card grid sm:grid-cols-3 gap-3 mb-4">${fld("t1", "Full name")}${fld("t2", "Mobile", "tel")}${sel("t3", "Assign class", ["Not assigned", ...allC()])}${fld("t4", "Subject")}${fld("t5", "Monthly salary", "number", "20000")}<div class="flex items-end">${btn("Add teacher", "person_add", "addT()")}</div></div>` +
+          dt(
+            "tch",
+            ["Name", "Class", "Subject", "Mobile", "Action"],
+            () =>
+              tch.map((t, i) =>
+                rw(
+                  [
+                    t.n,
+                    t.cls,
+                    t.sub,
+                    t.mob,
+                    btn(
+                      "Remove",
+                      "delete",
+                      `if(confirm('Remove ${t.n}?')){tch.splice(${i},1);satt.splice(${i},1);go('teachers')}`,
+                      "bd",
+                    ),
+                  ],
+                  [t.n, t.cls, t.sub, t.mob].join(" "),
+                  t.cls == "Not assigned" ? "" : t.cls,
+                ),
+              ),
+            { cls: 1 },
+          ),
+        staffatt: () =>
+          T(
+            "Staff attendance",
+            "Punch data from mobile or marked manually by the clerk",
+          ) +
+          dt(
+            "sa",
+            ["Teacher", "Punch in", "Status"],
+            () =>
+              tch.map((t, i) =>
+                rw(
+                  [
+                    t.n,
+                    ["08:52", "09:31", "-", "-"][i] || "-",
+                    `<select class="inp !w-36" onchange="satt[${i}]=this.value">${["Present", "Late", "Leave (CL)", "Absent"].map((o) => `<option ${satt[i] == o ? "selected" : ""}>${o}</option>`).join("")}</select>`,
+                  ],
+                  t.n + " " + t.mob,
+                  "",
+                  satt[i],
+                ),
+              ),
+            { f2: ["Status", ["Present", "Late", "Leave (CL)", "Absent"]] },
+          ) +
+          `<div class="mt-3">${btn("Save attendance", "save", "toast('Staff attendance saved')")}</div><p class="text-sm mt-2" style="color:var(--mut)">Late rule: after 9:15 AM is marked Late.</p>`,
+        payroll: () =>
+          T(
+            "Staff salary",
+            "Salary divided by 26 working days. Each absent day is deducted",
+          ) +
+          dt(
+            "pay",
+            [
+              "Staff",
+              "Salary",
+              "Present",
+              "Leave",
+              "Absent",
+              "Deduction",
+              "Net pay",
+              "",
+            ],
+            () =>
+              tch.map((t, i) => {
+                const d = Math.round((t.sal / 26) * t.a);
+                return rw(
+                  [
+                    t.n,
+                    money(t.sal),
+                    t.p,
+                    t.l,
+                    t.a,
+                    money(d),
+                    `<b>${money(t.sal - d)}</b>`,
+                    btn("Slip", "receipt", `slip(${i})`, "b2"),
+                  ],
+                  t.n + " " + t.sub,
+                );
+              }),
+          ) +
+          `<div class="mt-3 text-sm">Total payable: <b>${money(tch.reduce((a, t) => a + t.sal - Math.round((t.sal / 26) * t.a), 0))}</b></div>`,
+        approve: () =>
+          T("Leave approvals", "Staff leave requests") +
+          dt(
+            "lv",
+            ["Staff", "Type", "Dates", "Reason", "Status / action"],
+            () =>
+              leaves.map((l, i) =>
+                rw(
+                  [
+                    l[0],
+                    l[1],
+                    l[2],
+                    l[3],
+                    l[4] == "warn" ?
+                      btn(
+                        "Approve",
+                        "check",
+                        `leaves[${i}][4]='ok';go('approve');toast('Approved. Balance updated.')`,
+                      ) +
+                      " " +
+                      btn(
+                        "Reject",
+                        "close",
+                        `leaves[${i}][4]='bad';go('approve')`,
+                        "b2",
+                      )
+                    : tag(l[4] == "ok" ? "Approved" : "Rejected", l[4]),
+                  ],
+                  l.join(" "),
+                  "",
+                  l[4] == "warn" ? "Pending"
+                  : l[4] == "ok" ? "Approved"
+                  : "Rejected",
+                ),
+              ),
+            { f2: ["Status", ["Pending", "Approved", "Rejected"]] },
+          ),
+        balance: () =>
+          role == "admin" ?
+            T("Staff leave balance", "Everyone in one table") +
+            dt("bal", ["Staff", "CL left", "SL left", "EL left"], () =>
+              tch.map((t, i) =>
+                rw([t.n, 7 - i, 8 - (i % 3), 12 + (i % 3)], t.n),
+              ),
+            )
+          : T("My leave balance", "This academic year") +
+            tbl(
+              ["Type", "Total", "Taken", "Left"],
+              Object.entries(bal).map(([k, x]) => [
+                k,
+                x[0],
+                x[1],
+                tag(x[0] - x[1], "ok"),
+              ]),
+            ),
+        holidays: () =>
+          T(
+            "Holiday calendar",
+            "Attendance is skipped automatically on holidays",
+          ) +
+          (role == "admin" ?
+            `<div class="card grid sm:grid-cols-4 gap-3 mb-4">${fld("h1", "Date", "date")}${fld("h2", "Holiday name")}${sel("h3", "Type", ["Festival", "School", "National"])}<div class="flex items-end">${btn("Add holiday", "add", "hol.push([v('h1')||'2026-12-01',v('h2'),v('h3')]);hol.sort();go('holidays')")}</div></div>`
+          : "") +
+          dt(
+            "hol",
+            ["Date", "Holiday", "Type"],
+            () =>
+              hol.map((h) =>
+                rw([h[0], h[1], tag(h[2], "info")], h.join(" "), "", h[2]),
+              ),
+            {
+              f2: ["Type", ["Festival", "School", "National"]],
+              ph: "Search holidays",
+            },
+          ),
+        expenses: () => {
+          const e = exp.reduce((a, x) => a + x[3], 0);
+          return (
+            T(
+              "Expenses and accounts",
+              "Income comes from fee receipts automatically",
+            ) +
+            grid([
+              stat("trending_up", "Income this month", money(inc), "ok"),
+              stat("trending_down", "Expenses", money(e), "bad"),
+              stat("savings", "Net balance", money(inc - e)),
+              stat("receipt_long", "Receipts issued", rno - 1000),
+            ]) +
+            `<div class="card grid sm:grid-cols-5 gap-3 mb-4">${fld("x1", "Date", "date")}${fld("x2", "Details")}${sel("x3", "Category", ["Utilities", "Supplies", "Transport", "Salary", "Repairs", "Other"])}${fld("x4", "Amount", "number")}<div class="flex items-end">${btn("Add expense", "add", "exp.unshift([v('x1')||'2026-10-28',v('x2'),v('x3'),+v('x4')||0]);go('expenses')")}</div></div>` +
+            dt(
+              "exp",
+              ["Date", "Details", "Category", "Amount"],
+              () =>
+                exp.map((x) =>
+                  rw([x[0], x[1], x[2], money(x[3])], x.join(" "), "", x[2]),
+                ),
+              {
+                f2: [
+                  "Category",
+                  [
+                    "Utilities",
+                    "Supplies",
+                    "Transport",
+                    "Salary",
+                    "Repairs",
+                    "Other",
+                  ],
+                ],
+                ph: "Search expenses",
+              },
+            )
+          );
+        },
+        ptm: () =>
+          T("Parent-teacher meetings", "Record what was discussed") +
+          `<div class="card grid sm:grid-cols-3 gap-3 mb-4">${fld("p1", "Date", "date")}${sel("p2", "Class", allC())}${fld("p3", "Topic")}${fld("p4", "Parents attended")}${fld("p5", "Notes")}<div class="flex items-end">${btn("Save record", "save", "ptm.unshift([v('p1')||'2026-10-28',v('p2'),v('p3'),v('p4'),v('p5')]);go('ptm')")}</div></div>` +
+          dt(
+            "ptm",
+            ["Date", "Class", "Topic", "Attended", "Notes"],
+            () => ptm.map((p) => rw(p, p.join(" "), p[1])),
+            { cls: 1, ph: "Search meetings" },
+          ),
+        admit: () =>
+          T(
+            "Admit cards and seating plan",
+            "Filter by class, then print admit cards for the Half Yearly exam",
+          ) +
+          dt(
+            "adm2",
+            ["Roll", "Student", "Class", "Room / seat", ""],
+            () =>
+              act().map((s, i) =>
+                rw(
+                  [
+                    i + 1,
+                    s.n,
+                    s.c,
+                    "Room " + Math.ceil((i + 1) / 4) + " / B" + (i + 1),
+                    btn("Admit card", "badge", `adm(${stu.indexOf(s)})`, "b2"),
+                  ],
+                  sTxt(s),
+                  s.c,
+                ),
+              ),
+            { cls: 1 },
+          ) +
+          `<div class="card mt-4"><h3 class="font-semibold mb-2">Seating plan: Room 1</h3><div class="grid grid-cols-2 sm:grid-cols-4 gap-2">${act()
+            .slice(0, 4)
+            .map(
+              (s, i) =>
+                `<div class="rounded-xl p-3 text-sm" style="background:var(--soft)"><b>B${i + 1}</b><br>${s.n}<br>${s.c}</div>`,
+            )
+            .join("")}</div></div>`,
+        subs: () =>
+          T("Subscriptions", "Setup fee and monthly maintenance") +
+          dt(
+            "subs",
+            ["School", "Setup fee", "Per student / month", "Due", "Status"],
+            () =>
+              [
+                [
+                  "Shree Vidya Public",
+                  "₹40,000 paid",
+                  "₹15",
+                  "05 Nov",
+                  tag("Paid", "ok"),
+                  "Paid",
+                ],
+                [
+                  "Gyan Jyoti Academy",
+                  "₹40,000 paid",
+                  "₹15",
+                  "02 Nov",
+                  tag("Due", "warn"),
+                  "Due",
+                ],
+                [
+                  "Sunrise Convent",
+                  "₹40,000 paid",
+                  "₹15",
+                  "10 Oct",
+                  tag("Overdue: suspended", "bad"),
+                  "Overdue",
+                ],
+                [
+                  "Little Stars School",
+                  "₹40,000 paid",
+                  "₹15",
+                  "15 Nov",
+                  tag("Paid", "ok"),
+                  "Paid",
+                ],
+              ].map((r) => rw(r.slice(0, 5), r.join(" "), "", r[5])),
+            {
+              f2: ["Status", ["Paid", "Due", "Overdue"]],
+              ph: "Search schools",
+            },
+          ),
+        log: () =>
+          T("Activity log", "Who changed what") +
+          dt(
+            "log",
+            ["Time", "User", "Action"],
+            () =>
+              [
+                ["10:42", "clerk@svps", "Created fee receipt #1042"],
+                ["10:15", "admin@svps", "Approved leave (Mrs. Rekha)"],
+                ["09:50", "root", "Turned Library module ON"],
+                ["09:12", "teacher@svps", "Saved attendance for 5th A"],
+                ["09:05", "admin@svps", "Changed Clerk access: Payroll OFF"],
+                ["08:58", "clerk@svps", "Issued TC to Lakshya Bose"],
+              ].map((r) => rw(r, r.join(" "))),
+            { ph: "Search activity" },
+          ),
+        att: () =>
+          T(
+            "Student attendance",
+            "Class 5th A. Everyone is present by default, tap to mark absent",
+          ) +
+          `<div class="card"><div class="grid sm:grid-cols-2 gap-2">${stu
+            .slice(0, 8)
+            .map(
+              (s, i) =>
+                `<button class="flex items-center justify-between rounded-xl p-3 border" style="border-color:var(--bd);background:${absent.has(i) ? "var(--badBg)" : "var(--okBg)"};color:var(--tx)" onclick="absent.has(${i})?absent.delete(${i}):absent.add(${i});go('att')"><span>${s.n}</span><b style="color:${absent.has(i) ? "var(--bad)" : "var(--ok)"}">${absent.has(i) ? "Absent" : "Present"}</b></button>`,
+            )
+            .join(
+              "",
+            )}</div><div class="mt-4 flex flex-wrap gap-2 items-center"><span>Present ${8 - absent.size} | Absent ${absent.size}</span>${btn("Save", "save", "toast('Attendance saved')")}${waB("Send monthly attendance", `Dear Parent, Aarav attended 24 of 26 days this month. - Mrs. Rekha, 5th A, ${S.name}`)}</div></div>`,
+        marks: () =>
+          T("Marks entry", "Unit Test 2, Maths (out of 50), Class 5th A") +
+          `<div class="card"><table>${stu
+            .slice(0, 8)
+            .map(
+              (s, i) =>
+                `<tr><td>${s.n}</td><td><input type="number" aria-label="Marks for ${s.n}" class="inp !w-24" value="${30 + ((i * 7) % 20)}"></td></tr>`,
+            )
+            .join(
+              "",
+            )}</table><div class="mt-3 flex gap-2 flex-wrap">${btn("Save marks", "save", "toast('Marks saved')")}${waB("Send results", "Result: Unit Test 2, Maths 42/50. - Mrs. Rekha")}</div></div>`,
+        access: () =>
+          T(
+            "Access control",
+            "Switch each module ON or OFF for the Clerk and the Teacher. Changes apply when they log in next. Only you (Admin) can see this page",
+          ) +
+          `<div class="card mb-3 flex flex-wrap gap-2">${["clerk", "teacher"].map((r) => btn("All ON: " + R[r].n, "toggle_on", `setAll('${r}',1)`, "b2") + btn("All OFF: " + R[r].n, "toggle_off", `setAll('${r}',0)`, "b2")).join("")}</div>` +
+          dt(
+            "acc",
+            ["Module", "Section", "Sub Admin / Clerk", "Teacher"],
+            () =>
+              ALL.filter((p) => !NOGRANT.includes(p[0]) && modOn(p[0])).map(
+                (p) =>
+                  rw(
+                    [
+                      ic(p[1]) + " " + p[2],
+                      GRP[p[0]],
+                      ...["clerk", "teacher"].map(
+                        (r) =>
+                          `<button class="sw ${PERM[r].has(p[0]) ? "on" : ""}" aria-label="${p[2]} for ${r}" onclick="tp('${r}','${p[0]}',this)"></button>`,
+                      ),
+                    ],
+                    p[2] + " " + GRP[p[0]],
+                    "",
+                    GRP[p[0]],
+                  ),
+              ),
+            {
+              per: 10,
+              f2: [
+                "Section",
+                [
+                  "Main",
+                  "Admissions",
+                  "Students",
+                  "Exams",
+                  "Fees and accounts",
+                  "Staff and HR",
+                  "School",
+                  "Setup",
+                ],
+              ],
+              ph: "Search modules",
+            },
+          ),
+      });
+      function tp(r, id, el) {
+        PERM[r].has(id) ? PERM[r].delete(id) : PERM[r].add(id);
+        el.classList.toggle("on");
+        toast(
+          R[r].n +
+            ": " +
+            ALL.find((p) => p[0] == id)[2] +
+            " turned " +
+            (PERM[r].has(id) ? "ON" : "OFF"),
+        );
+      }
+      function setAll(r, x) {
+        ALL.forEach((p) => {
+          if (!NOGRANT.includes(p[0]))
+            x ? PERM[r].add(p[0]) : PERM[r].delete(p[0]);
+        });
+        go("access");
+        toast("Saved");
+      }
+      function openRec(i) {
+        if (!navFor(role).some((n) => n[0] == "search"))
+          return toast(
+            "Student records are turned OFF for your role by the Admin",
+          );
+        selStu = i;
+        go("search");
+      }
+      function recPrint(i) {
+        const s = stu[i];
+        doc(
+          `<h3 style="font:600 18px Poppins;margin-bottom:10px">Student record summary</h3><table>${sRow("Name", s.n)}${sRow("Admission no.", s.no)}${sRow("Class", s.c)}${sRow("Date of admission", s.adm)}${sRow("Date of birth", s.dob)}${sRow("Father", s.f)}${sRow("Mobile", s.mob)}${sRow("Address", s.addr)}${sRow("Previous school", s.prev)}${sRow("Status", s.st)}${sRow("Fee due", money(s.due))}</table>`,
+        );
+      }
+      function recHtml(i) {
+        const s = stu[i],
+          n = +s.no.replace(/\D/g, ""),
+          mk = (j, e) => 40 + ((n * 13 + j * 17 + e * 11) % 55),
+          ix = Math.max(0, CLS.indexOf(s.c.split(" ")[0])),
+          st0 = Math.max(0, ix - 4),
+          mon = ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
+          left = s.st != "Active",
+          pm = Math.min(7, Math.ceil(s.due / 1100)),
+          h = (t) => `<h3 class="font-semibold mt-6 mb-2">${t}</h3>`,
+          pct = (e) =>
+            (subj.reduce((a, _, j) => a + mk(j, e), 0) / subj.length).toFixed(
+              1,
+            ),
+          kv = (a) =>
+            `<div class="card grid sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">${a.map((x) => `<div><span style="color:var(--mut)">${x[0]}</span><br><b>${x[1] || "-"}</b></div>`).join("")}</div>`;
+        return `<div class="mb-3 flex gap-2 flex-wrap">${btn("Back to search", "arrow_back", "selStu=null;go('search')", "b2")}${btn("Print summary", "print", `recPrint(${i})`, "b2")}</div><div class="card flex items-center gap-4"><div class="hd text-2xl font-semibold rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px;background:var(--soft);color:var(--pri)">${s.n[0]}</div><div><div class="hd text-xl font-semibold">${s.n}</div><div class="text-sm" style="color:var(--mut)">${s.no} | Class ${s.c} | ${stClr(s)}</div></div></div>
+${h("Admission and personal details")}${kv([
+          ["Date of admission", s.adm],
+          ["Date of birth", s.dob],
+          ["Father / guardian", s.f],
+          ["Parent mobile", s.mob],
+          ["Address", s.addr],
+          ["Previous school", s.prev],
+          ["Current class", s.c],
+          [
+            "Status",
+            left ?
+              "Left school on " + (s.left || today) + " (TC issued)"
+            : "Currently studying",
+          ],
+        ])}
+${h("Documents")}<div class="card flex flex-wrap gap-2">${[
+          ["Aadhaar card", n % 7 != 3],
+          ["Birth certificate", true],
+          ["Previous school TC", n % 4 != 0 && !s.prev.startsWith("None")],
+        ]
+          .map((d) =>
+            tag(
+              d[0] + ": " + (d[1] ? "Uploaded" : "Missing"),
+              d[1] ? "ok" : "bad",
+            ),
+          )
+          .join("")}</div>
+${h("Class history")}${tbl(
+          ["Session", "Class", "Result"],
+          CLS.slice(st0, ix + 1).map((c, k) => {
+            const y = 2026 - (ix - st0 - k);
+            return [
+              y + "-" + String(y + 1).slice(2),
+              c,
+              k < ix - st0 ?
+                tag("Promoted (" + (60 + ((n + k * 7) % 35)) + "%)", "ok")
+              : left ? tag("Left / TC issued", "bad")
+              : tag("Ongoing", "info"),
+            ];
+          }),
+        )}
+${h("Exam marks, Semester 1 (out of 100)")}${tbl(["Subject", "Unit Test 1 (Jul)", "Unit Test 2 (Oct)", "Half Yearly (Nov)"], [...subj.map((x, j) => [x, mk(j, 1), mk(j, 2), tag("Upcoming", "info")]), ["<b>Percentage</b>", "<b>" + pct(1) + "%</b>", "<b>" + pct(2) + "%</b>", "-"], ["Class rank", (n % 15) + 1, (n % 12) + 1, "-"]])}
+${h("Attendance this session")}${tbl(
+          ["Month", "Working days", "Present", "Attendance"],
+          mon.map((m, k) => {
+            const wd = 24 + (k % 3),
+              p = wd - ((n + k * 3) % 4);
+            return [m, wd, p, Math.round((p / wd) * 100) + "%"];
+          }),
+        )}
+${h("Fee ledger (monthly fee ₹1,100)")}${tbl(
+          ["Month", "Amount", "Receipt", "Status"],
+          mon.map((m, k) => {
+            const pd = k >= 7 - pm;
+            return [
+              m + " 2026",
+              money(1100),
+              pd ? "-" : "R-" + (900 + n * 3 + k),
+              tag(pd ? "Pending" : "Paid", pd ? "bad" : "ok"),
+            ];
+          }),
+        )}<p class="text-sm mt-2">Total due now: <b>${money(s.due)}</b></p>
+${h("Teacher remarks and PTM")}${tbl(
+          ["Date", "By", "Remark"],
+          [
+            ["12 Oct 2026", "Class teacher", "Active in class discussions."],
+            [
+              "21 Sep 2026",
+              "Sports teacher",
+              "Won 2nd place in the inter-house race.",
+            ],
+            ["18 Oct 2026", "PTM", "Parent attended. Discussed progress."],
+            [
+              "02 Aug 2026",
+              "Class teacher",
+              n % 2 ?
+                "Homework needs more regular submission."
+              : "Neat notebooks and excellent handwriting.",
+            ],
+          ],
+        )}
+${h("Timeline")}<div class="card text-sm space-y-2">${[["15 Feb " + s.adm.slice(-4), "Enquiry registered"], [s.adm, "Admitted. Admission number " + s.no + " generated. Admission fee and first month fee received"], ["18 Oct 2026", "Attended parent-teacher meeting"], ["16 Oct 2026", "Unit Test 2 completed: " + pct(2) + "%"], ...(left ? [[s.left || today, "Transfer Certificate issued. Status changed to Left"]] : [])].map((e) => `<div class="flex gap-3"><span class="tag info flex-none">${e[0]}</span><span>${e[1]}</span></div>`).join("")}</div>`;
+      }
+      const REP = {
+        type: "Fee collection",
+        cl: "All",
+        sc: "All",
+        from: "",
+        to: "",
+        f2: "All",
+        q: "",
+        last: [],
+      };
+      const nn = (s) => +s.no.replace(/\D/g, ""),
+        fdt = (d) =>
+          new Date(d).toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          }),
+        gr = (p) =>
+          p >= 80 ? "A"
+          : p >= 60 ? "B"
+          : p >= 45 ? "C"
+          : "D",
+        upct = (s) => {
+          const n = nn(s);
+          return +(
+            subj.reduce(
+              (a, _, j) => a + 40 + ((n * 13 + j * 17 + 22) % 55),
+              0,
+            ) / subj.length
+          ).toFixed(1);
+        },
+        sm = (r, k = "a") => r.reduce((a, x) => a + x[k], 0),
+        o2 = (a, c, al) =>
+          `<option value="All">${al}</option>` +
+          a
+            .map((x) => `<option ${c == x ? "selected" : ""}>${x}</option>`)
+            .join("");
+      const REPS = {
+        "Fee collection": {
+          fl: "Payment mode",
+          f2v: ["Cash", "UPI", "Cheque"],
+          head: ["Receipt", "Date", "Student", "Class", "Mode", "Amount"],
+          rows: () =>
+            act().flatMap((s, i) =>
+              [0, 1].map((k) => {
+                const d = +new Date(
+                    2026,
+                    9 - (k % 2),
+                    2 + ((i * 3 + k * 9) % 26),
+                  ),
+                  a = [1100, 2200, 1100, 3300][(i + k) % 4],
+                  m = ["Cash", "UPI", "Cheque"][(i + k) % 3];
+                return {
+                  d,
+                  a,
+                  c: ["R-" + (1000 + i * 2 + k), fdt(d), s.n, s.c, m, money(a)],
+                  k: sTxt(s) + " " + m,
+                  cls: s.c,
+                  f2: m,
+                };
+              }),
+            ),
+          st: (r) => [
+            ["payments", "Total collected", money(sm(r)), "ok"],
+            ["receipt_long", "Receipts", r.length],
+            [
+              "trending_up",
+              "Average receipt",
+              money(r.length ? Math.round(sm(r) / r.length) : 0),
+            ],
+          ],
+        },
+        "Pending dues": {
+          fl: "Pending for",
+          f2v: ["1-2 months", "3+ months"],
+          head: ["Student", "Class", "Months pending", "Due", "Parent mobile"],
+          rows: () =>
+            act()
+              .filter((s) => s.due > 0)
+              .map((s) => {
+                const m = Math.ceil(s.due / 1100);
+                return {
+                  a: s.due,
+                  c: [s.n, s.c, m, tag(money(s.due), "bad"), s.mob],
+                  k: sTxt(s),
+                  cls: s.c,
+                  f2: m > 2 ? "3+ months" : "1-2 months",
+                };
+              }),
+          st: (r) => [
+            ["pending_actions", "Total pending", money(sm(r)), "bad"],
+            ["groups", "Students with dues", r.length],
+            [
+              "warning",
+              "Pending 3+ months",
+              r.filter((x) => x.f2 == "3+ months").length,
+              "warn",
+            ],
+          ],
+        },
+        Attendance: {
+          fl: "Attendance level",
+          f2v: ["Below 75%", "75% and above"],
+          head: [
+            "Student",
+            "Class",
+            "Working days",
+            "Present",
+            "Absent",
+            "Attendance",
+          ],
+          rows: () =>
+            act().map((s) => {
+              const ab = (nn(s) * 3) % 9,
+                p = Math.round(((26 - ab) / 26) * 100);
+              return {
+                a: p,
+                c: [
+                  s.n,
+                  s.c,
+                  26,
+                  26 - ab,
+                  ab,
+                  tag(p + "%", p < 75 ? "bad" : "ok"),
+                ],
+                k: sTxt(s),
+                cls: s.c,
+                f2: p < 75 ? "Below 75%" : "75% and above",
+              };
+            }),
+          st: (r) => [
+            [
+              "how_to_reg",
+              "Average attendance",
+              (r.length ? (sm(r) / r.length).toFixed(1) : 0) + "%",
+              "ok",
+            ],
+            ["groups", "Students", r.length],
+            ["warning", "Below 75%", r.filter((x) => x.a < 75).length, "bad"],
+          ],
+        },
+        "Result analysis": {
+          fl: "Grade",
+          f2v: ["A", "B", "C", "D"],
+          head: ["Student", "Class", "Unit Test 2", "Grade", "Result"],
+          rows: () =>
+            act().map((s) => {
+              const p = upct(s);
+              return {
+                a: p,
+                c: [
+                  s.n,
+                  s.c,
+                  p + "%",
+                  gr(p),
+                  tag(
+                    p >= 45 ? "Pass" : "Needs support",
+                    p >= 45 ? "ok" : "bad",
+                  ),
+                ],
+                k: sTxt(s),
+                cls: s.c,
+                f2: gr(p),
+              };
+            }),
+          st: (r) => [
+            [
+              "bar_chart",
+              "Average score",
+              (r.length ? (sm(r) / r.length).toFixed(1) : 0) + "%",
+            ],
+            [
+              "task_alt",
+              "Pass rate",
+              (r.length ?
+                Math.round((r.filter((x) => x.a >= 45).length / r.length) * 100)
+              : 0) + "%",
+              "ok",
+            ],
+            [
+              "workspace_premium",
+              "Grade A students",
+              r.filter((x) => x.f2 == "A").length,
+              "ok",
+            ],
+          ],
+        },
+        "Admission and enquiry": {
+          fl: "Status",
+          f2v: ["Active", "Left"],
+          head: ["Adm no.", "Name", "Class", "Date of admission", "Status"],
+          rows: () =>
+            stu.map((s) => ({
+              d: Date.parse(s.adm),
+              a: 1,
+              c: [s.no, s.n, s.c, s.adm, stClr(s)],
+              k: sTxt(s),
+              cls: s.c,
+              f2: stF(s),
+            })),
+          st: (r) => [
+            ["person_add", "Admissions", r.length],
+            [
+              "school",
+              "Active",
+              r.filter((x) => x.f2 == "Active").length,
+              "ok",
+            ],
+            [
+              "logout",
+              "Left (TC)",
+              r.filter((x) => x.f2 == "Left").length,
+              "bad",
+            ],
+            [
+              "contact_phone",
+              "Open enquiries",
+              enq.filter((e) => !["Admitted", "Not interested"].includes(e.st))
+                .length,
+              "warn",
+            ],
+          ],
+        },
+        "Staff attendance": {
+          fl: "Attendance",
+          f2v: ["Full attendance", "Has absences"],
+          head: [
+            "Staff",
+            "Class",
+            "Present",
+            "Leave",
+            "Absent",
+            "Salary deduction",
+          ],
+          rows: () =>
+            tch.map((t) => {
+              const d = Math.round((t.sal / 26) * t.a);
+              return {
+                a: d,
+                c: [t.n, t.cls, t.p, t.l, t.a, money(d)],
+                k: t.n + " " + t.sub + " " + t.mob,
+                cls: t.cls == "Not assigned" ? "" : t.cls,
+                f2: t.a ? "Has absences" : "Full attendance",
+              };
+            }),
+          st: (r) => [
+            ["groups", "Staff", r.length],
+            [
+              "warning",
+              "With absences",
+              r.filter((x) => x.f2 == "Has absences").length,
+              "warn",
+            ],
+            ["payments", "Total deduction", money(sm(r)), "bad"],
+          ],
+        },
+        Expenses: {
+          fl: "Category",
+          f2v: [
+            "Utilities",
+            "Supplies",
+            "Transport",
+            "Salary",
+            "Repairs",
+            "Other",
+          ],
+          head: ["Date", "Details", "Category", "Amount"],
+          rows: () =>
+            exp.map((x) => ({
+              d: Date.parse(x[0]),
+              a: x[3],
+              c: [x[0], x[1], x[2], money(x[3])],
+              k: x.join(" "),
+              cls: "",
+              f2: x[2],
+            })),
+          st: (r) => [
+            ["trending_down", "Total expenses", money(sm(r)), "bad"],
+            ["receipt_long", "Entries", r.length],
+            [
+              "arrow_upward",
+              "Highest entry",
+              money(Math.max(0, ...r.map((x) => x.a))),
+            ],
+          ],
+        },
+      };
+      function repOut() {
+        const D = REPS[REP.type],
+          q = REP.q.trim().toLowerCase(),
+          f = REP.from ? Date.parse(REP.from) : 0,
+          t = REP.to ? Date.parse(REP.to) + 864e5 - 1 : 1e15,
+          rows = D.rows().filter(
+            (x) =>
+              (!q || x.k.toLowerCase().includes(q)) &&
+              (REP.cl == "All" || !x.cls || x.cls.split(" ")[0] == REP.cl) &&
+              (REP.sc == "All" ||
+                !x.cls ||
+                !x.cls.split(" ")[1] ||
+                x.cls.split(" ")[1] == REP.sc) &&
+              (REP.f2 == "All" || !x.f2 || x.f2 == REP.f2) &&
+              (!x.d || (x.d >= f && x.d <= t)),
+          );
+        REP.last = rows;
+        DT.rep = Object.assign(
+          { q: "", cl: "All", sc: "All", f2: "All", per: 5 },
+          DT.rep || {},
+          { pg: 1, head: D.head, get: () => rows, o: {} },
+        );
+        return (
+          grid(D.st(rows).map((s) => stat(...s))) +
+          `<div id="dtb_rep">${dtBody("rep")}</div>`
+        );
+      }
+      function repSet(k, x) {
+        REP[k] = x;
+        $("repOut").innerHTML = repOut();
+      }
+      function repType(x) {
+        REP.type = x;
+        REP.f2 = "All";
+        go("reports");
+      }
+      function repReset() {
+        Object.assign(REP, {
+          cl: "All",
+          sc: "All",
+          from: "",
+          to: "",
+          f2: "All",
+          q: "",
+        });
+        go("reports");
+      }
+      function repMonth() {
+        REP.from = "2026-10-01";
+        REP.to = "2026-10-31";
+        go("reports");
+      }
+      function repPrint() {
+        const D = REPS[REP.type];
+        doc(
+          `<h3 style="text-align:center;font:600 18px Poppins">${REP.type.toUpperCase()} REPORT</h3><p style="font-size:12px;margin:8px 0">Class: ${REP.cl} | Section: ${REP.sc} | From: ${REP.from || "-"} | To: ${REP.to || "-"} | ${D.fl}: ${REP.f2} | Search: ${REP.q || "-"} | Generated: ${today}</p><table><tr>${D.head.map((h) => `<th>${h}</th>`).join("")}</tr>${REP.last.map((x) => `<tr>${x.c.map((c) => `<td>${String(c).replace(/<[^>]+>/g, "")}</td>`).join("")}</tr>`).join("")}</table>${sign("Prepared by", "Principal")}`,
+        );
+      }
+      Object.assign(P, {
+        reports: () => {
+          const D = REPS[REP.type];
+          return (
+            T(
+              "Reports",
+              "Pick a report, apply filters, then print or save as PDF",
+            ) +
+            `<div class="card grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mb-4"><div class="lg:col-span-2"><label for="rp0">Report</label><select id="rp0" class="inp" onchange="repType(this.value)">${Object.keys(
+              REPS,
+            )
+              .map(
+                (k) =>
+                  `<option ${REP.type == k ? "selected" : ""}>${k}</option>`,
+              )
+              .join(
+                "",
+              )}</select></div><div><label for="rp1">Class</label><select id="rp1" class="inp" onchange="repSet('cl',this.value)">${o2(CLS, REP.cl, "All classes")}</select></div><div><label for="rp2">Section</label><select id="rp2" class="inp" onchange="repSet('sc',this.value)">${o2(["A", "B", "C"], REP.sc, "All sections")}</select></div><div><label for="rp3">From date</label><input id="rp3" type="date" class="inp" value="${REP.from}" onchange="repSet('from',this.value)"></div><div><label for="rp4">To date</label><input id="rp4" type="date" class="inp" value="${REP.to}" onchange="repSet('to',this.value)"></div><div><label for="rp5">${D.fl}</label><select id="rp5" class="inp" onchange="repSet('f2',this.value)">${o2(D.f2v, REP.f2, "All")}</select></div><div><label for="rp6">Search (student ID, name, mobile)</label><input id="rp6" class="inp" value="${REP.q}" oninput="repSet('q',this.value)"></div><div class="sm:col-span-2 lg:col-span-4 flex flex-wrap gap-2">${btn("This month", "today", "repMonth()", "b2")}${btn("Reset filters", "restart_alt", "repReset()", "b2")}${btn("Print / Save as PDF", "print", "repPrint()")}</div></div><div id="repOut">${repOut()}</div>`
+          );
+        },
+      });
+      ALL.push(["import", "upload_file", "Import old data"]);
+      GRP.import = "Admissions";
+      PERM.clerk.add("import");
+      R.admin.nav.push(ALL[ALL.length - 1]);
+      function idc(i) {
+        const s = stu[i];
+        doc(
+          `<h3 style="text-align:center;font:600 16px Poppins;margin-bottom:10px">STUDENT ID CARD | ${S.ses}</h3><div style="width:320px;margin:0 auto;border:2px solid #1d4ed8;border-radius:12px;overflow:hidden;text-align:center"><div style="background:#1d4ed8;color:#fff;padding:8px;font:600 14px Poppins">${S.name}</div><div style="width:84px;height:100px;margin:12px auto 6px;border:1px dashed #999;display:flex;align-items:center;justify-content:center;font-size:11px;color:#666">PHOTO</div><div style="font:600 17px Poppins">${s.n}</div><div style="padding:4px 14px 10px;text-align:left"><table style="font-size:12px">${sRow("Adm no.", s.no)}${sRow("Class", s.c)}${sRow("DOB", s.dob)}${sRow("Father", s.f)}${sRow("Mobile", s.mob)}${sRow("Address", s.addr || "-")}</table></div><div style="height:26px;margin:6px 14px;background:repeating-linear-gradient(90deg,#111 0 2px,#fff 2px 5px,#111 5px 6px,#fff 6px 9px)"></div><div style="font-size:11px;padding:4px 0 10px">Principal: ${S.pr} | Valid: ${S.ses}</div></div>`,
+        );
+      }
+      function tcDraft(i) {
+        const s = stu[i];
+        doc(
+          `<p style="text-align:center;color:#b42318;font-weight:700;font-size:13px">DRAFT: filled automatically at admission. Issue it when the student leaves.</p><h3 style="text-align:center;font:600 18px Poppins;margin:8px 0 12px">TRANSFER CERTIFICATE</h3><table>${sRow("TC number (reserved)", s.tcNo || "TC/2026/" + s.no.slice(-3))}${sRow("Name of student", s.n)}${sRow("Father / Guardian", s.f)}${sRow("Admission number", s.no)}${sRow("Date of birth", s.dob)}${sRow("Date of admission", s.adm)}${sRow("Class last studied", s.c)}${sRow("Date of leaving", "Filled on the day of issue")}${sRow("Dues pending", money(s.due))}${sRow("General conduct", "Good")}</table>${sign("Clerk", "Principal")}`,
+        );
+      }
+      function doAdm() {
+        const n = v("m1") || "New Student",
+          a = +v("m11") || 0,
+          b = +v("m12") || 0,
+          no = "SVPS-" + (101 + stu.length),
+          i = stu.length,
+          s = {
+            no,
+            n,
+            c: v("m4"),
+            f: v("m5") || "-",
+            mo: v("m6"),
+            g: v("m3"),
+            mob: v("m7"),
+            dob: v("m2") || "-",
+            adm: today,
+            st: "Active",
+            due: 0,
+            addr: v("m8"),
+            prev: v("m9"),
+            lc: v("m10"),
+            af: a,
+            ff: b,
+            tcNo: "TC/" + S.ses.slice(0, 4) + "/" + no.slice(-3),
+          };
+        stu.push(s);
+        inc += a + b;
+        rno++;
+        $("ok").innerHTML =
+          `<div class="card"><b class="hd">Admission done: ${no}</b><div class="text-sm my-3 space-y-1"><div>${tag("Done", "ok")} Admission number generated</div><div>${tag("Done", "ok")} Student ID card generated</div><div>${tag("Ready", "ok")} TC draft prepared (${s.tcNo}). On the day the student leaves, just click Issue TC</div><div>${tag("Done", "ok")} Fees received: ${money(a + b)}</div></div><div class="flex gap-2 flex-wrap">${btn("Print ID card", "badge", `idc(${i})`)}${btn("View TC draft", "description", `tcDraft(${i})`, "b2")}${btn("Print receipt", "receipt", `receipt(${rno - 1},stu[${i}],[['Admission fee',${a}],['First month fee',${b}]],${a + b},'${v("m13")}')`, "b2")}${btn("Open full record", "folder_shared", `openRec(${i})`, "b2")}${waB("Send welcome message", `Welcome to ${S.name}! ${n} is admitted to ${s.c}. Admission No: ${no}. We are happy to have you.`)}</div></div>`;
+      }
+      function recHtml(i) {
+        const s = stu[i],
+          n = nn(s),
+          left = s.st != "Active",
+          ix = Math.max(0, CLS.indexOf(s.c.split(" ")[0])),
+          ay =
+            Date.parse(s.adm) ?
+              new Date(Date.parse(s.adm)).getFullYear()
+            : 2026,
+          st0 = ix - Math.max(0, Math.min(ix, 2026 - ay)),
+          mk = (j, e, k) => 40 + ((n * 13 + j * 17 + e * 11 + k * 7) % 55),
+          pc = (k, e) =>
+            +(
+              subj.reduce((a, _, j) => a + mk(j, e, k), 0) / subj.length
+            ).toFixed(1),
+          EX = ["Unit Test 1", "Unit Test 2", "Half Yearly", "Annual"],
+          mon = ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
+          pm = Math.min(7, Math.ceil(s.due / 1100)),
+          h = (t) => `<h3 class="font-semibold mt-6 mb-2">${t}</h3>`,
+          kv = (a) =>
+            `<div class="card grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 text-sm">${a.map((x) => `<div><span style="color:var(--mut)">${x[0]}</span><br><b>${x[1] || "-"}</b></div>`).join("")}</div>`;
+        let all = [],
+          blocks = "";
+        for (let k = st0; k <= ix; k++) {
+          const cur = k == ix,
+            dn = cur ? 2 : 4,
+            y = 2026 - (ix - k);
+          for (let e = 1; e <= dn; e++) all.push(pc(k, e));
+          blocks += `<details class="card mt-3" ${cur ? "open" : ""}><summary class="cursor-pointer font-semibold">${CLS[k]} (${y}-${String(y + 1).slice(2)}) ${cur ? tag(left ? "Left (TC issued)" : "Ongoing", "info") : tag("Passed: " + pc(k, 4) + "%", "ok")}</summary><p class="text-sm my-2" style="color:var(--mut)">${dn} exams attended | Attendance ${88 + ((n + k * 5) % 11)}% | Class rank ${((n + k) % 12) + 1}</p><div class="overflow-x-auto"><table><thead><tr><th>Subject</th>${EX.map((x) => `<th>${x}</th>`).join("")}</tr></thead><tbody>${subj.map((x, j) => `<tr><td>${x}</td>${[1, 2, 3, 4].map((e) => `<td>${e <= dn ? mk(j, e, k) : "-"}</td>`).join("")}</tr>`).join("")}<tr><td><b>Percentage</b></td>${[1, 2, 3, 4].map((e) => `<td><b>${e <= dn ? pc(k, e) + "%" : "-"}</b></td>`).join("")}</tr></tbody></table></div></details>`;
+        }
+        const strip = CLS.map((c, k) =>
+          k < st0 ? tag(c + ": previous school", "warn")
+          : k < ix ? tag(c + " passed", "ok")
+          : k == ix ? tag(c + " current", "info")
+          : `<span class="tag" style="background:var(--bd);color:var(--mut)">${c}</span>`,
+        ).join(" ");
+        return `<div class="mb-3 flex gap-2 flex-wrap">${btn("Back", "arrow_back", "selStu=null;go('search')", "b2")}${btn("ID card", "badge", `idc(${i})`)}${btn(left ? "View issued TC" : "TC draft", "description", left ? `tc(${i})` : `tcDraft(${i})`, "b2")}${btn("Print summary", "print", `recPrint(${i})`, "b2")}</div><div class="card flex items-center gap-4"><div class="hd text-2xl font-semibold rounded-full flex items-center justify-center flex-none" style="width:64px;height:64px;background:var(--soft);color:var(--pri)">${s.n[0]}</div><div><div class="hd text-xl font-semibold">${s.n}</div><div class="text-sm" style="color:var(--mut)">${s.no} | Class ${s.c} | ${stClr(s)}</div></div></div>
+${h("At a glance")}${grid([stat("quiz", "Exams attended", all.length), stat("bar_chart", "Overall average", (all.reduce((a, b) => a + b, 0) / all.length).toFixed(1) + "%", "ok"), stat("how_to_reg", "Average attendance", "92%"), stat("currency_rupee", "Fee due", money(s.due), s.due ? "bad" : "ok")])}
+${h("Admission form details")}${kv([
+          ["Admission no.", s.no],
+          ["Date of admission", s.adm],
+          ["Class at admission", CLS[st0]],
+          ["Current class", s.c],
+          ["Student name", s.n],
+          ["Gender", s.g || (n % 2 ? "Male" : "Female")],
+          ["Date of birth", s.dob],
+          ["Father", s.f],
+          [
+            "Mother",
+            s.mo || "Mrs. " + s.f.replace("Mr. ", "").replace(" Sr.", ""),
+          ],
+          ["Parent mobile (WhatsApp)", s.mob],
+          ["Address", s.addr],
+          ["Previous school", s.prev],
+          [
+            "Last class passed",
+            s.lc || (st0 > 0 ? CLS[st0 - 1] : "None (first admission)"),
+          ],
+          ["Admission fee paid", money(s.af == null ? 3000 : s.af)],
+          ["First month fee paid", money(s.ff == null ? 1100 : s.ff)],
+          ["Admission receipt", "R-" + (900 + n)],
+          ["TC number (reserved)", s.tcNo || "TC/2026/" + s.no.slice(-3)],
+          ["Status", left ? "Left school (TC issued)" : "Currently studying"],
+        ])}
+${h("Documents")}<div class="card flex flex-wrap gap-2">${[
+          ["Aadhaar card", n % 7 != 3],
+          ["Birth certificate", true],
+          [
+            "Previous school TC",
+            n % 4 != 0 && !String(s.prev).startsWith("None"),
+          ],
+        ]
+          .map((d) =>
+            tag(
+              d[0] + ": " + (d[1] ? "Uploaded" : "Missing"),
+              d[1] ? "ok" : "bad",
+            ),
+          )
+          .join("")}</div>
+${h("LKG to 10th journey")}<div class="card flex flex-wrap gap-2">${strip}</div>
+${h("Class-wise exam record (tap a class to open)")}${blocks}
+${h("Attendance this session")}${tbl(
+          ["Month", "Working days", "Present", "Attendance"],
+          mon.map((m, k) => {
+            const wd = 24 + (k % 3),
+              p = wd - ((n + k * 3) % 4);
+            return [m, wd, p, Math.round((p / wd) * 100) + "%"];
+          }),
+        )}
+${h("Fee ledger (monthly fee ₹1,100)")}${tbl(
+          ["Month", "Amount", "Receipt", "Status"],
+          mon.map((m, k) => {
+            const pd = k >= 7 - pm;
+            return [
+              m + " 2026",
+              money(1100),
+              pd ? "-" : "R-" + (900 + n * 3 + k),
+              tag(pd ? "Pending" : "Paid", pd ? "bad" : "ok"),
+            ];
+          }),
+        )}<p class="text-sm mt-2">Total due now: <b>${money(s.due)}</b></p>
+${h("Teacher remarks and PTM")}${tbl(
+          ["Date", "By", "Remark"],
+          [
+            ["12 Oct 2026", "Class teacher", "Active in class discussions."],
+            [
+              "21 Sep 2026",
+              "Sports teacher",
+              "Won 2nd place in the inter-house race.",
+            ],
+            ["18 Oct 2026", "PTM", "Parent attended. Discussed progress."],
+            [
+              "02 Aug 2026",
+              "Class teacher",
+              n % 2 ?
+                "Homework needs more regular submission."
+              : "Neat notebooks and excellent handwriting.",
+            ],
+          ],
+        )}
+${h("Timeline")}<div class="card text-sm space-y-2">${[["15 Feb " + s.adm.slice(-4), "Enquiry registered"], [s.adm, "Admitted. Admission number " + s.no + ", ID card and TC draft generated"], ["18 Oct 2026", "Attended parent-teacher meeting"], ["16 Oct 2026", "Unit Test 2 completed: " + pc(ix, 2) + "%"], ...(left ? [[s.left || today, "Transfer Certificate issued. Status changed to Left"]] : [])].map((e) => `<div class="flex gap-3"><span class="tag info flex-none">${e[0]}</span><span>${e[1]}</span></div>`).join("")}</div>`;
+      }
+      const SAMPLE =
+        "Name,Class,Section,Father,Mother,Mobile,DOB,Admission date,Address,Previous school,Fee due\nRiya Singh,4th,A,Mr. Ajay Singh,Mrs. Sunita Singh,9876500001,2016-04-12,2022-04-01,Rajendra Nagar Patna,Little Angels,0\nSameer Khan,7th,B,Mr. Iqbal Khan,Mrs. Shabana Khan,9876500002,2013-09-03,2020-04-05,Kankarbagh Patna,City Montessori,2200\nPooja Kumari,LKG,A,Mr. Manoj Kumar,Mrs. Anita Devi,9876500003,2022-01-20,2026-04-10,Boring Road Patna,None,0\nAman Raj,12th,A,Mr. Dinesh Raj,Mrs. Rita Raj,98765,2012-02-02,2019-04-01,Danapur,DAV,0";
+      let impR = [];
+      const fd2 = (x) => {
+        const d = new Date(x);
+        return isNaN(d) ?
+            x || "-"
+          : d.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            });
+      };
+      function impLoad() {
+        $("imp").value = SAMPLE;
+        impPrev();
+      }
+      function impFile(e) {
+        const f = e.target.files[0];
+        if (!f) return;
+        const r = new FileReader();
+        r.onload = () => {
+          $("imp").value = r.result;
+          impPrev();
+        };
+        r.readAsText(f);
+      }
+      function impPrev() {
+        const L = v("imp")
+          .split(/\r?\n/)
+          .map((x) => x.trim())
+          .filter(Boolean);
+        impR = L.filter((l, k) => !(k == 0 && /^name/i.test(l))).map((l) => {
+          const c = l.split(/,|\t/).map((x) => x.trim()),
+            e = [];
+          if (!c[0]) e.push("Name missing");
+          if (!CLS.includes(c[1])) e.push("Class must be LKG to 10th");
+          if (!/^\d{10}$/.test(c[5] || "")) e.push("Mobile must be 10 digits");
+          if (
+            stu.some(
+              (s) =>
+                s.n.toLowerCase() == (c[0] || "").toLowerCase() &&
+                s.mob == c[5],
+            )
+          )
+            e.push("Already exists");
+          return { c, e };
+        });
+        const ok = impR.filter((r) => !r.e.length).length;
+        $("impOut").innerHTML =
+          `<div class="card mb-3"><b>${ok} ready to import</b>, ${impR.length - ok} need fixing</div>` +
+          tbl(
+            ["Name", "Class", "Mobile", "Check"],
+            impR
+              .slice(0, 30)
+              .map((r) => [
+                r.c[0] || "-",
+                (r.c[1] || "-") + " " + (r.c[2] || ""),
+                r.c[5] || "-",
+                r.e.length ? tag(r.e.join(", "), "bad") : tag("OK", "ok"),
+              ]),
+          ) +
+          (ok ?
+            `<div class="mt-3">${btn("Import " + ok + " students", "upload", "impGo()")}</div>`
+          : "");
+      }
+      function impGo() {
+        let k = 0;
+        impR
+          .filter((r) => !r.e.length)
+          .forEach((r) => {
+            const [n, cl, sc, f, mo, mob, dob, adm, addr, prev, due] = r.c,
+              no = "SVPS-" + (101 + stu.length);
+            stu.push({
+              no,
+              n,
+              c: cl + " " + (sc || "A").toUpperCase(),
+              f,
+              mo,
+              mob,
+              dob: fd2(dob),
+              adm: fd2(adm),
+              st: "Active",
+              due: +due || 0,
+              addr,
+              prev: prev || "None",
+              af: 0,
+              ff: 0,
+              tcNo: "TC/" + S.ses.slice(0, 4) + "/" + no.slice(-3),
+            });
+            k++;
+          });
+        toast(k + " students imported. ID cards and TC drafts are ready.");
+        go("stu");
+      }
+      Object.assign(P, {
+        import: () =>
+          T(
+            "Import old data",
+            "Add all your existing students in one go. No need to type each student again",
+          ) +
+          `<div class="card mb-4 text-sm"><ol class="list-decimal pl-5 space-y-1"><li>Keep one student per row. Columns: Name, Class, Section, Father, Mother, Mobile, DOB, Admission date, Address, Previous school, Fee due.</li><li>Copy the rows from Excel and paste them below, or choose a CSV file.</li><li>Check the preview. Wrong rows are marked in red with the reason.</li><li>Click Import. Every student gets an admission number, ID card and TC draft automatically.</li></ol></div><div class="card"><label for="imp">Paste rows here</label><textarea id="imp" rows="6" class="inp" placeholder="Name, Class, Section, Father..."></textarea><div class="flex flex-wrap gap-2 mt-3 items-center"><input type="file" accept=".csv,.txt" onchange="impFile(event)" aria-label="Choose CSV file" class="text-sm">${btn("Load sample data", "dataset", "impLoad()", "b2")}${btn("Preview", "visibility", "impPrev()")}</div></div><div id="impOut" class="mt-4"></div>`,
+      });
+      // ===== v4: logins, allocation, marks workflow, root controls =====
+      ALL.push(
+        ["users", "manage_accounts", "Users and logins"],
+        ["alloc", "assignment_ind", "Class and subject allocation"],
+        ["mstatus", "fact_check", "Marks tracking"],
+        ["marksheet", "table_chart", "Class marksheet"],
+      );
+      Object.assign(GRP, {
+        users: "Setup",
+        alloc: "School",
+        mstatus: "Exams",
+        marksheet: "Exams",
+        schools: "Schools",
+        modules: "Schools",
+        plans: "Billing",
+        subs: "Billing",
+        tickets: "Support",
+        announce: "Support",
+        backup: "Security",
+        log: "Security",
+      });
+      NOGRANT.push("users");
+      PERM.teacher.add("marksheet");
+      PERM.clerk.add("marksheet");
+      R.admin.nav.push(...ALL.slice(-4));
+      R.root.nav = [
+        ["dash", "dashboard", "Dashboard"],
+        ["schools", "domain_add", "Schools"],
+        ["modules", "toggle_on", "Module control"],
+        ["plans", "sell", "Plans and limits"],
+        ["subs", "payments", "Subscriptions"],
+        ["tickets", "support_agent", "Support tickets"],
+        ["announce", "campaign", "Announcements"],
+        ["backup", "backup", "Backup and security"],
+        ["log", "history", "Activity log"],
+      ];
+      function buildNav() {
+        const g = {};
+        navFor(role).forEach((n) =>
+          (g[GRP[n[0]]] = g[GRP[n[0]]] || []).push(n),
+        );
+        $("nav").innerHTML =
+          [
+            "Main",
+            "Schools",
+            "Billing",
+            "Support",
+            "Security",
+            "Admissions",
+            "Students",
+            "Exams",
+            "Fees and accounts",
+            "Staff and HR",
+            "School",
+            "Setup",
+          ]
+            .filter((k) => g[k])
+            .map(
+              (k) =>
+                `<details open class="mb-1"><summary class="px-3 py-1.5 text-xs font-semibold uppercase tracking-wide cursor-pointer select-none" style="color:var(--mut)">${k}</summary>${g[k].map((n) => `<button class="nav" data-p="${n[0]}" onclick="go('${n[0]}')">${ic(n[1])}${n[2]}</button>`).join("")}</details>`,
+            )
+            .join("") + '<div class="h-16"></div>';
+      }
+      const PM = {
+        exams: "Exams and report cards",
+        report: "Exams and report cards",
+        admit: "Exams and report cards",
+        marks: "Exams and report cards",
+        mstatus: "Exams and report cards",
+        marksheet: "Exams and report cards",
+        remind: "Fee auto-reminders",
+        payroll: "Staff payroll",
+        slip: "Staff payroll",
+        timetable: "Timetable",
+        expenses: "Expenses and accounts",
+        ptm: "PTM records",
+        import: "Bulk import",
+      };
+      function modOn(id) {
+        const m = PM[id];
+        return !m || SCH[0].mods[m];
+      }
+      const MODS = [
+        [
+          "Exams and report cards",
+          "quiz",
+          "Exams, marks entry, report cards, admit cards, class marksheet",
+        ],
+        [
+          "Fee auto-reminders",
+          "notifications_active",
+          "Automatic reminders for fee dues",
+        ],
+        ["Staff payroll", "payments", "Salary calculation and slips"],
+        ["Timetable", "schedule", "Class and teacher timetable, substitutes"],
+        [
+          "Expenses and accounts",
+          "account_balance",
+          "Income, expenses, balance",
+        ],
+        ["PTM records", "forum", "Parent-teacher meeting records"],
+        ["Bulk import", "upload_file", "Import old students from Excel or CSV"],
+        ["Transport", "directions_bus", "Routes, stops, bus fees"],
+        ["Library", "local_library", "Book issue and return"],
+        ["Hostel", "bed", "Rooms and hostel fees"],
+        ["Online fees (UPI)", "qr_code_2", "Payment links with auto receipts"],
+        [
+          "WhatsApp API (auto send)",
+          "mark_chat_read",
+          "Fully automatic bulk messages",
+        ],
+        ["Biometric attendance", "fingerprint", "Fingerprint and face devices"],
+        ["Custom branding", "palette", "School logo and colours"],
+      ];
+      const planMods = (p) => {
+        const o = {};
+        MODS.forEach(
+          (m, i) =>
+            (o[m[0]] =
+              p == "Premium" ? 1
+              : p == "Standard" ?
+                i < 7 ?
+                  1
+                : 0
+              : m[0] == "Bulk import" ? 1
+              : 0),
+        );
+        return o;
+      };
+      let SCH = [
+          ["Shree Vidya Public School", "Patna", 420, "Standard", "Active"],
+          ["Little Stars School", "Ranchi", 260, "Basic", "Active"],
+          ["Gyan Jyoti Academy", "Lucknow", 610, "Premium", "Active"],
+          ["Sunrise Convent", "Kanpur", 180, "Basic", "Suspended"],
+        ].map((a) => ({
+          n: a[0],
+          city: a[1],
+          stu: a[2],
+          plan: a[3],
+          st: a[4],
+          mods: planMods(a[3]),
+        })),
+        MSEL = 0;
+      let TK = [
+        [
+          "Gyan Jyoti Academy",
+          "Cannot print report card",
+          "High",
+          "Open",
+          "27 Oct",
+        ],
+        ["Little Stars School", "Add new fee head", "Normal", "Open", "26 Oct"],
+        [
+          "Shree Vidya Public School",
+          "Need training for new clerk",
+          "Normal",
+          "Resolved",
+          "22 Oct",
+        ],
+      ];
+      let USERS = [
+          ["root", "root123", "root", "Root Admin"],
+          ["admin", "admin123", "admin", "Dr. S. K. Mishra (Principal)"],
+          ["clerk", "clerk123", "clerk", "Rakesh Kumar (Clerk)"],
+          ["teacher", "teacher123", "teacher", "Mrs. Rekha Singh", "t1"],
+          ["anil", "anil123", "teacher", "Mr. Anil Kumar", "t2"],
+          ["pooja", "pooja123", "teacher", "Ms. Pooja Rani", "t3"],
+        ].map((a) => ({
+          u: a[0],
+          p: a[1],
+          r: a[2],
+          n: a[3],
+          tid: a[4],
+          on: 1,
+        })),
+        ME = null,
+        TID = 4;
+      tch.forEach((t, i) => (t.id = "t" + (i + 1)));
+      let asg = [
+        ["t1", "5th A", "Maths"],
+        ["t1", "5th B", "Maths"],
+        ["t1", "6th A", "Maths"],
+        ["t2", "5th A", "Science"],
+        ["t2", "5th A", "Computer"],
+        ["t2", "7th A", "Science"],
+        ["t2", "8th B", "Science"],
+        ["t2", "9th B", "Science"],
+        ["t4", "5th A", "English"],
+        ["t4", "5th A", "Hindi"],
+        ["t4", "3rd A", "English"],
+        ["t4", "8th B", "English"],
+      ].map(([t, c, s]) => ({ t, c, s }));
+      subj.forEach((s) => asg.push({ t: "t3", c: "LKG A", s }));
+      const EXAMS = ["Unit Test 1", "Unit Test 2", "Half Yearly", "Annual"],
+        mkKey = (e, c, s) => e + "|" + c + "|" + s,
+        tn = (id) => (tch.find((t) => t.id == id) || { n: "No teacher" }).n,
+        pw = () => "Pass@" + (1000 + Math.floor(Math.random() * 9000));
+      let MK = {},
+        MS = { a: 0, e: "Unit Test 2", max: 50 },
+        MSH = { c: "5th A", e: "Unit Test 2" },
+        MS2 = { e: "Unit Test 2" },
+        CLX = [],
+        ABS = new Set(["SVPS-103", "SVPS-106"]);
+      [
+        ["5th A", "Maths"],
+        ["5th A", "English"],
+        ["5th A", "Science"],
+      ].forEach(([c, s]) => {
+        const x = {};
+        stu
+          .filter((k) => k.c == c)
+          .forEach(
+            (k, i) => (x[k.no] = String(28 + ((i * 5 + s.length) % 20))),
+          );
+        MK[mkKey("Unit Test 2", c, s)] = { v: x, st: "Submitted" };
+      });
+      const myT = () => tch.find((t) => t.id == (ME && ME.tid)) || tch[0],
+        myAsg = () => asg.filter((a) => a.t == myT().id),
+        myCls = () => (myT().cls == "Not assigned" ? null : myT().cls),
+        myClasses = () => [
+          ...new Set([...myAsg().map((a) => a.c), myCls()].filter(Boolean)),
+        ];
+      const sx = (id, l, o, cur, ch) =>
+        `<div><label for="${id}">${l}</label><select id="${id}" class="inp" onchange="${ch}">${o.map((x, k) => `<option value="${k}" ${x == cur || k === cur ? "selected" : ""}>${x}</option>`).join("")}</select></div>`;
+      const note = (t) => `<div class="card">${t}</div>`;
+      function cred(n, u, p) {
+        doc(
+          `<h3 style="text-align:center;font:600 18px Poppins;margin-bottom:10px">LOGIN DETAILS</h3><table>${sRow("Name", n)}${sRow("Username", u)}${sRow("Temporary password", p)}</table><p style="font-size:12px;margin-top:8px">Please change the password after the first login.</p><div class="noprint" style="margin-top:12px">${waB("Send on WhatsApp", `Hello ${n}, your ${S.name} login. Username: ${u} Password: ${p}`)}</div>`,
+        );
+      }
+      function addT() {
+        const n = v("t1") || "New teacher",
+          id = "t" + ++TID;
+        let u =
+          n
+            .toLowerCase()
+            .replace(/^(mr|mrs|ms|dr)\.?\s+/, "")
+            .split(" ")[0]
+            .replace(/[^a-z0-9]/g, "") || id;
+        if (USERS.some((x) => x.u == u)) u += TID;
+        const p = pw(),
+          c = v("t3");
+        if (c != "Not assigned")
+          tch.forEach((t) => {
+            if (t.cls == c) t.cls = "Not assigned";
+          });
+        tch.push({
+          id,
+          n,
+          cls: c,
+          sub: v("t4") || "-",
+          mob: v("t2"),
+          sal: +v("t5") || 20000,
+          p: 0,
+          l: 0,
+          a: 0,
+        });
+        satt.push("Present");
+        USERS.push({ u, p, r: "teacher", n, tid: id, on: 1 });
+        go("teachers");
+        cred(n, u, p);
+      }
+      function userCreate() {
+        const r = v("u1") == "Teacher" ? "teacher" : "clerk";
+        let n, tid;
+        if (r == "teacher") {
+          const t = tch.find((x) => x.id == v("u3"));
+          if (!t) return toast("Every teacher already has a login");
+          n = t.n;
+          tid = t.id;
+        } else n = v("u2").trim();
+        if (!n) return toast("Enter the clerk name");
+        let u = (
+          v("u4").trim().toLowerCase() ||
+          n
+            .toLowerCase()
+            .replace(/^(mr|mrs|ms|dr)\.?\s+/, "")
+            .split(" ")[0]
+        ).replace(/[^a-z0-9]/g, "");
+        if (USERS.some((x) => x.u == u)) u += USERS.length;
+        const p = v("u5") || pw();
+        USERS.push({ u, p, r, n, tid, on: 1 });
+        go("users");
+        cred(n, u, p);
+      }
+      function userReset(u) {
+        const x = USERS.find((k) => k.u == u);
+        x.p = pw();
+        cred(x.n, x.u, x.p);
+      }
+      function userTog(u) {
+        const x = USERS.find((k) => k.u == u);
+        x.on = x.on ? 0 : 1;
+        go("users");
+        toast(x.n + (x.on ? " can log in again" : " login disabled"));
+      }
+      function ctSet() {
+        const c = v("ac"),
+          t = tch[+v("at")];
+        tch.forEach((x) => {
+          if (x.cls == c) x.cls = "Not assigned";
+        });
+        t.cls = c;
+        go("alloc");
+        toast(t.n + " is now class teacher of " + c);
+      }
+      function asgAdd() {
+        const c = v("bc"),
+          s = v("bs"),
+          t = tch[+v("bt")];
+        asg = asg.filter((a) => !(a.c == c && a.s == s));
+        asg.push({ t: t.id, c, s });
+        go("alloc");
+        toast(s + " for " + c + " assigned to " + t.n);
+      }
+      function mkSave(sub) {
+        const a = myAsg()[MS.a],
+          key = mkKey(MS.e, a.c, a.s),
+          rec = MK[key] || (MK[key] = { v: {}, st: "Pending" }),
+          L = stu.filter((s) => s.c == a.c && s.st == "Active");
+        let bad = 0,
+          empty = 0;
+        L.forEach((s) => {
+          const x = $("mk_" + s.no).value.trim();
+          rec.v[s.no] = x;
+          if (!x) empty++;
+          else if (
+            x.toUpperCase() != "AB" &&
+            (isNaN(x) || +x < 0 || +x > MS.max)
+          )
+            bad++;
+        });
+        if (bad)
+          return toast(bad + " mark(s) are invalid or above the maximum");
+        if (sub) {
+          if (empty)
+            return toast("Fill marks for all students. Use AB for absent");
+          rec.st = "Submitted";
+          toast("Marks submitted and locked");
+        } else {
+          rec.st = "Draft";
+          toast("Draft saved");
+        }
+        go("marks");
+      }
+      function mkUnlock(k) {
+        MK[k].st = "Draft";
+        go("mstatus");
+        toast("Unlocked. The teacher can edit again");
+      }
+      function tg(no) {
+        ABS.has(no) ? ABS.delete(no) : ABS.add(no);
+        go("att");
+      }
+      function schAdd() {
+        const n = v("a1") || "New School";
+        SCH.push({
+          n,
+          city: v("a2") || "-",
+          stu: 0,
+          plan: v("a5"),
+          st: "Active",
+          mods: planMods(v("a5")),
+        });
+        go("schools");
+        cred(
+          (v("a3") || "Admin") + " (" + n + ")",
+          "admin@" + n.toLowerCase().split(" ")[0],
+          pw(),
+        );
+      }
+      function schReset(i) {
+        cred(
+          SCH[i].n + " Admin",
+          "admin@" + SCH[i].n.toLowerCase().split(" ")[0],
+          pw(),
+        );
+      }
+      D.root = () =>
+        T("Dashboard", "All schools at a glance") +
+        grid([
+          stat("domain", "Total schools", SCH.length),
+          stat(
+            "verified",
+            "Active",
+            SCH.filter((s) => s.st == "Active").length,
+            "ok",
+          ),
+          stat(
+            "groups",
+            "Total students",
+            SCH.reduce((a, s) => a + s.stu, 0).toLocaleString("en-IN"),
+          ),
+          stat(
+            "support_agent",
+            "Open tickets",
+            TK.filter((t) => t[3] == "Open").length,
+            "warn",
+          ),
+        ]) +
+        dt(
+          "rd",
+          ["School", "City", "Students", "Plan", "Status"],
+          () =>
+            SCH.map((s) =>
+              rw(
+                [
+                  s.n,
+                  s.city,
+                  s.stu,
+                  s.plan,
+                  tag(s.st, s.st == "Active" ? "ok" : "bad"),
+                ],
+                s.n + " " + s.city,
+                "",
+                s.plan,
+              ),
+            ),
+          {
+            f2: ["Plan", ["Basic", "Standard", "Premium"]],
+            ph: "Search schools",
+          },
+        );
+      D.teacher = () => {
+        const t = myT(),
+          A = myAsg(),
+          c = myCls(),
+          pd = A.filter((a) => {
+            const r = MK[mkKey("Unit Test 2", a.c, a.s)];
+            return !r || r.st != "Submitted";
+          }).length;
+        return (
+          T(
+            "Welcome, " + t.n,
+            (c ? "Class teacher of " + c + ". " : "") +
+              "Teaching " +
+              A.length +
+              " class-subject groups",
+          ) +
+          grid([
+            stat(
+              "fingerprint",
+              "Punch status",
+              punched ? "In " + punched : "Not yet",
+              "warn",
+            ),
+            stat("class", "Classes I teach", new Set(A.map((a) => a.c)).size),
+            stat(
+              "edit_note",
+              "Marks pending (Unit Test 2)",
+              pd,
+              pd ? "warn" : "ok",
+            ),
+            stat(
+              "checklist",
+              "Attendance",
+              c ?
+                ABS.size ?
+                  "Taken"
+                : "Pending"
+              : "Not applicable",
+              c ? "bad" : "info",
+            ),
+          ]) +
+          `<div class="card mb-3"><h3 class="font-semibold mb-2">My classes and subjects</h3><div class="flex flex-wrap gap-2">${A.map((a) => tag(a.c + " | " + a.s, "info")).join("") || "None yet"}</div></div><div class="card"><h3 class="font-semibold mb-2">Notices</h3><p>Diwali holiday begins 31 Oct. Parent-teacher meeting on 8 Nov at 10 AM.</p></div>`
+        );
+      };
+      const oldTT = P.timetable;
+      Object.assign(P, {
+        schools: () =>
+          T("Schools", "Create schools, choose a plan and manage each school") +
+          `<div class="card grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">${fld("a1", "School name")}${fld("a2", "City")}${fld("a3", "Admin name")}${fld("a4", "Admin mobile", "tel")}${sel("a5", "Plan", ["Basic", "Standard", "Premium"])}<div class="flex items-end">${btn("Create school and Admin login", "add", "schAdd()")}</div></div>` +
+          dt(
+            "sch",
+            [
+              "School",
+              "City",
+              "Plan",
+              "Students",
+              "Modules ON",
+              "Status",
+              "Actions",
+            ],
+            () =>
+              SCH.map((s, i) =>
+                rw(
+                  [
+                    s.n,
+                    s.city,
+                    s.plan,
+                    s.stu,
+                    MODS.filter((m) => s.mods[m[0]]).length + "/" + MODS.length,
+                    tag(s.st, s.st == "Active" ? "ok" : "bad"),
+                    btn(
+                      "Modules",
+                      "toggle_on",
+                      `MSEL=${i};go('modules')`,
+                      "b2",
+                    ) +
+                      " " +
+                      btn("Admin password", "key", `schReset(${i})`, "b2") +
+                      " " +
+                      btn(
+                        s.st == "Active" ? "Suspend" : "Activate",
+                        s.st == "Active" ? "block" : "check_circle",
+                        `SCH[${i}].st=SCH[${i}].st=='Active'?'Suspended':'Active';go('schools')`,
+                        s.st == "Active" ? "bd" : "b2",
+                      ),
+                  ],
+                  s.n + " " + s.city,
+                  "",
+                  s.plan,
+                ),
+              ),
+            {
+              f2: ["Plan", ["Basic", "Standard", "Premium"]],
+              ph: "Search schools",
+            },
+          ),
+        modules: () => {
+          const s = SCH[MSEL];
+          return (
+            T(
+              "Module control",
+              "Choose a school, then switch its modules ON or OFF. Hidden modules vanish from that school menus",
+            ) +
+            `<div class="card grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mb-4">${sx(
+              "ms1",
+              "School",
+              SCH.map((x) => x.n),
+              MSEL,
+              "MSEL=+this.value;go('modules')",
+            )}${sx("ms2", "Plan", ["Basic", "Standard", "Premium"], s.plan, "SCH[MSEL].plan=['Basic','Standard','Premium'][+this.value];SCH[MSEL].mods=planMods(SCH[MSEL].plan);go('modules')")}<div><label>Status</label>${tag(s.st, s.st == "Active" ? "ok" : "bad")}</div><div class="flex items-end">${btn("Apply plan defaults", "restart_alt", "SCH[MSEL].mods=planMods(SCH[MSEL].plan);go('modules')", "b2")}</div></div><div class="card grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mb-4"><div class="sm:col-span-2 lg:col-span-4 font-semibold">Limits for this school</div>${fld(
+              "l1",
+              "Max students",
+              "number",
+              s.plan == "Basic" ? 200
+              : s.plan == "Standard" ? 500
+              : 5000,
+            )}${fld("l2", "Admin logins", "number", s.plan == "Premium" ? 2 : 1)}${fld(
+              "l3",
+              "Clerk logins",
+              "number",
+              s.plan == "Basic" ? 1
+              : s.plan == "Standard" ? 3
+              : 6,
+            )}${fld(
+              "l4",
+              "Teacher logins",
+              "number",
+              s.plan == "Basic" ? 15
+              : s.plan == "Standard" ? 40
+              : 200,
+            )}<div>${btn("Save limits", "save", "toast('Limits saved')")}</div></div><div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">${MODS.map((m, i) => `<div class="card flex items-start gap-3"><span class="tag info !p-2 !rounded-xl">${ic(m[1])}</span><div class="flex-1 min-w-0"><div class="font-semibold">${m[0]}</div><div class="text-sm" style="color:var(--mut)">${m[2]}</div></div><button class="sw ${s.mods[m[0]] ? "on" : ""}" aria-label="${m[0]}" onclick="SCH[MSEL].mods['${m[0]}']^=1;go('modules')"></button></div>`).join("")}</div><p class="text-sm mt-3" style="color:var(--mut)">${MSEL == 0 ? "Live in this demo for the first school: Exams, Reminders, Payroll, Timetable, Expenses, PTM and Import. Turn one OFF, log in as Admin and it is gone from the menu." : "Changes apply to this school immediately."}</p>`
+          );
+        },
+        plans: () =>
+          T(
+            "Plans and limits",
+            "What each plan includes. Limits are checked when a school adds users",
+          ) +
+          tbl(
+            [
+              "Plan",
+              "Students up to",
+              "Setup fee",
+              "Per student / month",
+              "Admins",
+              "Clerks",
+              "Teachers",
+              "Modules",
+            ],
+            [
+              [
+                "Basic",
+                "200",
+                "₹30,000",
+                "₹10",
+                "1",
+                "1",
+                "15",
+                "Core + Bulk import",
+              ],
+              [
+                "Standard",
+                "500",
+                "₹40,000",
+                "₹15",
+                "1",
+                "3",
+                "40",
+                "Core + 7 add-ons",
+              ],
+              [
+                "Premium",
+                "Unlimited",
+                "₹60,000",
+                "₹20",
+                "2",
+                "6",
+                "Unlimited",
+                "All modules",
+              ],
+            ],
+          ),
+        tickets: () =>
+          T("Support tickets", "Problems raised by schools") +
+          dt(
+            "tk",
+            ["School", "Issue", "Priority", "Date", "Status", ""],
+            () =>
+              TK.map((t, i) =>
+                rw(
+                  [
+                    t[0],
+                    t[1],
+                    tag(t[2], t[2] == "High" ? "bad" : "info"),
+                    t[4],
+                    tag(t[3], t[3] == "Open" ? "warn" : "ok"),
+                    t[3] == "Open" ?
+                      btn(
+                        "Resolve",
+                        "check",
+                        `TK[${i}][3]='Resolved';go('tickets')`,
+                        "b2",
+                      )
+                    : "",
+                  ],
+                  t.join(" "),
+                  "",
+                  t[3],
+                ),
+              ),
+            { f2: ["Status", ["Open", "Resolved"]], ph: "Search tickets" },
+          ),
+        announce: () =>
+          T("Announcements", "Send a message to schools") +
+          `<div class="card grid gap-3">${sel("an1", "Send to", ["All schools", "Basic plan", "Standard plan", "Premium plan"])}<div><label for="an2">Message</label><textarea id="an2" rows="3" class="inp">Scheduled maintenance on Sunday 2 AM to 4 AM. The software may be unavailable for a short time.</textarea></div><div>${btn("Send announcement", "send", "toast('Announcement sent')")}</div></div>`,
+        backup: () =>
+          T("Backup and security", "Daily automatic backups for every school") +
+          dt(
+            "bk",
+            ["School", "Last backup", "Size", "Status", "Actions"],
+            () =>
+              SCH.map((s, i) =>
+                rw(
+                  [
+                    s.n,
+                    "29 Oct 2026, 02:00",
+                    (s.stu / 40).toFixed(1) + " MB",
+                    tag(
+                      s.st == "Active" ? "Healthy" : "Paused",
+                      s.st == "Active" ? "ok" : "warn",
+                    ),
+                    btn(
+                      "Backup now",
+                      "backup",
+                      `toast('Backup started for ${s.n}')`,
+                      "b2",
+                    ) +
+                      " " +
+                      btn(
+                        "Restore",
+                        "restore",
+                        `toast('Restore request sent to your team')`,
+                        "b2",
+                      ),
+                  ],
+                  s.n,
+                ),
+              ),
+            { ph: "Search schools" },
+          ),
+        users: () =>
+          T(
+            "Users and logins",
+            "Create separate logins for each teacher and clerk. Share the username and temporary password on WhatsApp",
+          ) +
+          `<div class="card grid gap-3 sm:grid-cols-2 lg:grid-cols-3 mb-4">${sel("u1", "Role", ["Teacher", "Sub Admin / Clerk"])}<div><label for="u3">Teacher (for Teacher role)</label><select id="u3" class="inp">${
+            tch
+              .filter((t) => !USERS.some((u) => u.tid == t.id))
+              .map((t) => `<option value="${t.id}">${t.n}</option>`)
+              .join("") || '<option value="">All teachers have logins</option>'
+          }</select></div>${fld("u2", "Clerk full name (for Clerk role)")}${fld("u4", "Username (optional)")}${fld("u5", "Temporary password (optional)")}<div class="flex items-end">${btn("Create login", "person_add", "userCreate()")}</div></div>` +
+          dt(
+            "usr",
+            ["Name", "Role", "Username", "Class", "Status", "Actions"],
+            () =>
+              USERS.filter((u) => u.r != "root").map((u) =>
+                rw(
+                  [
+                    u.n,
+                    R[u.r].n,
+                    u.u,
+                    u.tid ?
+                      (tch.find((t) => t.id == u.tid) || { cls: "-" }).cls
+                    : "-",
+                    tag(u.on ? "Active" : "Disabled", u.on ? "ok" : "bad"),
+                    u.r == "admin" ?
+                      "Owner"
+                    : btn(
+                        "Reset password",
+                        "key",
+                        `userReset('${u.u}')`,
+                        "b2",
+                      ) +
+                      " " +
+                      btn(
+                        u.on ? "Disable" : "Enable",
+                        u.on ? "block" : "check_circle",
+                        `userTog('${u.u}')`,
+                        u.on ? "bd" : "b2",
+                      ),
+                  ],
+                  u.n + " " + u.u + " " + u.r,
+                  "",
+                  R[u.r].n,
+                ),
+              ),
+            {
+              f2: [
+                "Role",
+                ["Teacher", "Sub Admin / Clerk", "Admin (Principal)"],
+              ],
+              ph: "Search users",
+            },
+          ),
+        alloc: () => {
+          const cl = [
+              ...new Set(stu.filter((s) => s.st == "Active").map((s) => s.c)),
+            ],
+            miss = [];
+          cl.forEach((c) =>
+            subj.forEach((s) => {
+              if (!asg.some((a) => a.c == c && a.s == s))
+                miss.push(c + " | " + s);
+            }),
+          );
+          return (
+            T(
+              "Class and subject allocation",
+              "Decide who is class teacher and which teacher teaches which subject in which class",
+            ) +
+            grid([
+              stat("groups", "Teachers", tch.length),
+              stat("assignment_ind", "Allocations", asg.length),
+              stat(
+                "warning",
+                "Subjects without teacher",
+                miss.length,
+                miss.length ? "warn" : "ok",
+              ),
+              stat("school", "Classes with students", cl.length),
+            ]) +
+            `<div class="grid gap-4 lg:grid-cols-2 mb-4"><div class="card grid gap-3 sm:grid-cols-3"><div class="sm:col-span-3 font-semibold">Class teacher (one per class)</div>${sel("ac", "Class", allC())}${sx(
+              "at",
+              "Teacher",
+              tch.map((t) => t.n),
+              0,
+              "",
+            )}<div class="flex items-end">${btn("Set", "check", "ctSet()")}</div></div><div class="card grid gap-3 sm:grid-cols-2"><div class="sm:col-span-2 font-semibold">Subject teacher</div>${sel("bc", "Class", allC())}${sel("bs", "Subject", subj)}${sx(
+              "bt",
+              "Teacher",
+              tch.map((t) => t.n),
+              0,
+              "",
+            )}<div class="flex items-end">${btn("Allocate", "add", "asgAdd()")}</div></div></div>` +
+            dt(
+              "alc",
+              ["Class", "Subject", "Teacher", "Class teacher", ""],
+              () =>
+                asg.map((a, i) =>
+                  rw(
+                    [
+                      a.c,
+                      a.s,
+                      tn(a.t),
+                      (tch.find((t) => t.id == a.t) || {}).cls == a.c ?
+                        tag("Yes", "ok")
+                      : "-",
+                      btn(
+                        "Remove",
+                        "delete",
+                        `asg.splice(${i},1);go('alloc')`,
+                        "bd",
+                      ),
+                    ],
+                    a.c + " " + a.s + " " + tn(a.t),
+                    a.c,
+                    tn(a.t),
+                  ),
+                ),
+              {
+                cls: 1,
+                f2: ["Teacher", tch.map((t) => t.n)],
+                ph: "Search class, subject or teacher",
+              },
+            ) +
+            `<h3 class="font-semibold mt-6 mb-2">Teacher workload</h3>` +
+            tbl(
+              [
+                "Teacher",
+                "Class teacher of",
+                "Classes",
+                "Subjects",
+                "Periods / week (approx)",
+              ],
+              tch.map((t) => {
+                const A = asg.filter((a) => a.t == t.id),
+                  p = A.length * 5;
+                return [
+                  t.n,
+                  t.cls,
+                  new Set(A.map((a) => a.c)).size,
+                  new Set(A.map((a) => a.s)).size,
+                  p > 30 ? tag(p + " (high)", "warn") : p,
+                ];
+              }),
+            ) +
+            (miss.length ?
+              `<h3 class="font-semibold mt-6 mb-2">Subjects still without a teacher</h3><div class="card flex flex-wrap gap-2">${miss
+                .slice(0, 24)
+                .map((m) => tag(m, "warn"))
+                .join(
+                  "",
+                )}${miss.length > 24 ? tag("+" + (miss.length - 24) + " more", "info") : ""}</div>`
+            : "")
+          );
+        },
+        marks: () => {
+          const A = myAsg();
+          if (!A.length)
+            return (
+              T("Marks entry", "") +
+              note(
+                "No class or subject is allocated to you yet. Please ask the Admin.",
+              )
+            );
+          if (MS.a >= A.length) MS.a = 0;
+          const a = A[MS.a],
+            rec = MK[mkKey(MS.e, a.c, a.s)] || { v: {}, st: "Pending" },
+            lock = rec.st == "Submitted",
+            L = stu.filter((s) => s.c == a.c && s.st == "Active");
+          return (
+            T(
+              "Marks entry",
+              "You can enter marks only for your own classes and subjects. Submit to lock them",
+            ) +
+            `<div class="card grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mb-3">${sx(
+              "ma",
+              "Class and subject",
+              A.map((x) => x.c + " | " + x.s),
+              MS.a,
+              "MS.a=+this.value;go('marks')",
+            )}${sx("me", "Exam", EXAMS, MS.e, "MS.e=EXAMS[+this.value];go('marks')")}<div><label for="mm">Maximum marks</label><input id="mm" type="number" class="inp" value="${MS.max}" onchange="MS.max=+this.value||50"></div><div><label>Status</label>${tag(
+              rec.st,
+              lock ? "ok"
+              : rec.st == "Draft" ? "warn"
+              : "bad",
+            )}</div></div><div class="card overflow-x-auto"><table><thead><tr><th>Adm no.</th><th>Student</th><th>Marks (AB = absent)</th></tr></thead><tbody>${L.map((s) => `<tr><td>${s.no}</td><td>${s.n}</td><td><input id="mk_${s.no}" class="inp !w-28" inputmode="decimal" value="${rec.v[s.no] == null ? "" : rec.v[s.no]}" ${lock ? "disabled" : ""} aria-label="Marks for ${s.n}"></td></tr>`).join("") || '<tr><td colspan="3">No students in this class</td></tr>'}</tbody></table></div><div class="mt-3 flex flex-wrap gap-2">${lock ? tag("Submitted and locked. Ask the Admin to unlock for changes.", "ok") : btn("Save draft", "save", "mkSave(0)", "b2") + btn("Submit and lock", "lock", "mkSave(1)")}${myCls() ? btn("Open class marksheet", "table_chart", "go('marksheet')", "b2") : ""}</div>`
+          );
+        },
+        marksheet: () => {
+          const adm = role != "teacher",
+            cls = adm ? MSH.c : myCls();
+          if (!cls)
+            return (
+              T("Class marksheet", "") +
+              note(
+                "Only a class teacher can see the full marksheet of a class. Your own subject marks are in Marks entry.",
+              )
+            );
+          CLX = [...new Set(stu.map((s) => s.c))].sort();
+          return (
+            T(
+              "Class marksheet",
+              "All subjects of one class in one place, with pending subjects",
+            ) +
+            `<div class="card grid gap-3 sm:grid-cols-3 mb-3">${adm ? sx("mc", "Class", CLX, cls, "MSH.c=CLX[+this.value];go('marksheet')") : `<div><label>Class</label><b>${cls}</b></div>`}${sx("mx", "Exam", EXAMS, MSH.e, "MSH.e=EXAMS[+this.value];go('marksheet')")}</div><div class="card mb-3"><h3 class="font-semibold mb-2">Subject status</h3><div class="flex flex-wrap gap-2">${subj
+              .map((s) => {
+                const a = asg.find((x) => x.c == cls && x.s == s),
+                  r = MK[mkKey(MSH.e, cls, s)],
+                  st = r ? r.st : "Pending";
+                return tag(
+                  s + ": " + (a ? tn(a.t) : "No teacher") + " (" + st + ")",
+                  st == "Submitted" ? "ok"
+                  : st == "Draft" ? "warn"
+                  : "bad",
+                );
+              })
+              .join("")}</div></div>` +
+            dt(
+              "msh",
+              ["Student", ...subj, "Entered"],
+              () =>
+                stu
+                  .filter((s) => s.c == cls && s.st == "Active")
+                  .map((s) => {
+                    const x = subj.map((b) => {
+                      const r = MK[mkKey(MSH.e, cls, b)];
+                      return r && r.v[s.no] != null && r.v[s.no] !== "" ?
+                          r.v[s.no]
+                        : "-";
+                    });
+                    return rw(
+                      [
+                        s.n,
+                        ...x,
+                        x.filter((k) => k != "-").length + "/" + subj.length,
+                      ],
+                      sTxt(s),
+                      s.c,
+                    );
+                  }),
+              { ph: "Search student" },
+            )
+          );
+        },
+        mstatus: () => {
+          const st = (a) =>
+              (MK[mkKey(MS2.e, a.c, a.s)] || { st: "Pending" }).st,
+            sb = asg.filter((a) => st(a) == "Submitted").length;
+          return (
+            T(
+              "Marks tracking",
+              "See which teacher has submitted marks and who is pending",
+            ) +
+            `<div class="card mb-3 max-w-xs">${sx("ms", "Exam", EXAMS, MS2.e, "MS2.e=EXAMS[+this.value];go('mstatus')")}</div>` +
+            grid([
+              stat("task_alt", "Submitted", sb, "ok"),
+              stat("pending", "Pending or draft", asg.length - sb, "warn"),
+            ]) +
+            dt(
+              "mst",
+              ["Class", "Subject", "Teacher", "Status", "Action"],
+              () =>
+                asg.map((a) => {
+                  const s = st(a),
+                    k = mkKey(MS2.e, a.c, a.s),
+                    t = tch.find((x) => x.id == a.t) || {};
+                  return rw(
+                    [
+                      a.c,
+                      a.s,
+                      tn(a.t),
+                      tag(
+                        s,
+                        s == "Submitted" ? "ok"
+                        : s == "Draft" ? "warn"
+                        : "bad",
+                      ),
+                      s == "Submitted" ?
+                        btn("Unlock", "lock_open", `mkUnlock('${k}')`, "b2")
+                      : waB(
+                          "Remind",
+                          `Reminder: please submit ${MS2.e} marks for ${a.c} ${a.s}. - ${S.name}`,
+                        ),
+                    ],
+                    a.c + " " + a.s + " " + tn(a.t),
+                    a.c,
+                    s,
+                  );
+                }),
+              {
+                cls: 1,
+                f2: ["Status", ["Pending", "Draft", "Submitted"]],
+                ph: "Search class, subject or teacher",
+              },
+            )
+          );
+        },
+        att: () => {
+          const c = myCls();
+          if (!c)
+            return (
+              T("Student attendance", "") +
+              note(
+                "Only the class teacher takes daily attendance. You are not assigned as a class teacher.",
+              )
+            );
+          const L = stu.filter((s) => s.c == c && s.st == "Active"),
+            ab = L.filter((s) => ABS.has(s.no)).length;
+          return (
+            T(
+              "Student attendance",
+              "Class " +
+                c +
+                ". Everyone is present by default, tap to mark absent",
+            ) +
+            `<div class="card"><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">${L.map((s) => `<button class="flex items-center justify-between rounded-xl p-3 border" style="border-color:var(--bd);background:${ABS.has(s.no) ? "var(--badBg)" : "var(--okBg)"};color:var(--tx)" onclick="tg('${s.no}')"><span>${s.n}</span><b style="color:${ABS.has(s.no) ? "var(--bad)" : "var(--ok)"}">${ABS.has(s.no) ? "Absent" : "Present"}</b></button>`).join("")}</div><div class="mt-4 flex flex-wrap gap-2 items-center"><span>Present ${L.length - ab} | Absent ${ab}</span>${btn("Save", "save", "toast('Attendance saved')")}${waB("Send monthly attendance", `Dear Parent, attendance update for this month from the class teacher. - ${myT().n}, ${c}, ${S.name}`)}</div></div>`
+          );
+        },
+        pend: () => {
+          const c = myCls();
+          if (role == "teacher" && !c)
+            return (
+              T("Fees due", "") +
+              note("Only the class teacher sees the fees due list of a class.")
+            );
+          return (
+            T(
+              role == "teacher" ? "Fees due (" + c + ")" : "Pending fees",
+              "Largest dues first. Filter by class",
+            ) +
+            dt(
+              "pend",
+              ["Student", "Class", "Due", "Reminder"],
+              () =>
+                act()
+                  .filter((s) => s.due > 0 && (role != "teacher" || s.c == c))
+                  .sort((a, b) => b.due - a.due)
+                  .map((s) =>
+                    rw(
+                      [
+                        s.n,
+                        s.c,
+                        tag(money(s.due), "bad"),
+                        waB(
+                          "WhatsApp",
+                          `Dear Parent, fee of ${money(s.due)} for ${s.n} is pending. Please pay at the earliest. - ${S.name}`,
+                        ),
+                      ],
+                      sTxt(s),
+                      s.c,
+                    ),
+                  ),
+              { cls: role == "teacher" ? 0 : 1 },
+            )
+          );
+        },
+        due: () => P.pend(),
+        notes: () => {
+          const A = myAsg();
+          return (
+            T(
+              "Notes and homework",
+              "Upload for one of your classes and share with parents on WhatsApp",
+            ) +
+            `<div class="card grid gap-3">${sx(
+              "nt",
+              "Class and subject",
+              A.map((x) => x.c + " | " + x.s),
+              0,
+              "",
+            )}${fld("w1", "Title", "text", "Chapter 4 homework")}${fld("w2", "File (PDF or photo)", "file")}<div class="flex gap-2 flex-wrap">${btn("Upload", "upload", "toast('Uploaded')")}${waB("Share on WhatsApp", `Homework uploaded by ${myT().n}. - ${S.name}`)}</div></div>`
+          );
+        },
+        leave: () =>
+          T("Apply for leave", "Your request goes to the Admin") +
+          `<div class="card grid sm:grid-cols-2 gap-3">${sel("l1", "Leave type", ["Casual (CL)", "Sick (SL)", "Earned (EL)", "Half-day", "Unpaid"])}${fld("l2", "From", "date")}${fld("l3", "To", "date")}${fld("l4", "Reason")}<div>${btn("Submit request", "send", "leaves.unshift([myT().n,v('l1').slice(-3,-1)||'CL',v('l2')||'TBD',v('l4')||'-','warn']);toast('Leave request sent')")}</div></div>`,
+        slip: () =>
+          T("My salary slip", "October 2026") +
+          `<div class="card">${btn("View salary slip", "receipt", `slip(${tch.indexOf(myT())})`)}</div>`,
+        timetable: () => {
+          if (role != "teacher") return oldTT();
+          const A = myAsg();
+          return (
+            T("My timetable", "Built from your class and subject allocation") +
+            `<div class="card overflow-x-auto"><table><tr><th>Day</th>${[1, 2, 3, 4, 5, 6].map((p) => `<th>P${p}</th>`).join("")}</tr>${[
+              "Mon",
+              "Tue",
+              "Wed",
+              "Thu",
+              "Fri",
+              "Sat",
+            ]
+              .map(
+                (d, r) =>
+                  `<tr><td><b>${d}</b></td>${[0, 1, 2, 3, 4, 5]
+                    .map((c) => {
+                      const k = (r * 6 + c * 5) % (A.length * 2 || 1),
+                        a = A[k];
+                      return `<td>${a && k < A.length ? a.c + '<br><span style="color:var(--mut)">' + a.s + "</span>" : "Free"}</td>`;
+                    })
+                    .join("")}</tr>`,
+              )
+              .join("")}</table></div>`
+          );
+        },
+        search: () =>
+          selStu !== null ?
+            recHtml(selStu)
+          : T(
+              "Student records",
+              role == "teacher" ?
+                "Students of your own classes. Open a student to see the complete record"
+              : "Search any detail: name, admission number, mobile, parent, address, class or previous school",
+            ) +
+            dt(
+              "srch",
+              [
+                "Adm no.",
+                "Name",
+                "Class",
+                "Father",
+                "Mobile",
+                "Admitted",
+                "Status",
+                "",
+              ],
+              () =>
+                stu
+                  .map((s, i) => ({ s, i }))
+                  .filter(
+                    (x) => role != "teacher" || myClasses().includes(x.s.c),
+                  )
+                  .map(({ s, i }) =>
+                    rw(
+                      [
+                        s.no,
+                        s.n,
+                        s.c,
+                        s.f,
+                        s.mob,
+                        s.adm,
+                        stClr(s),
+                        btn(
+                          "Open full record",
+                          "folder_shared",
+                          `openRec(${i})`,
+                        ),
+                      ],
+                      sTxt(s),
+                      s.c,
+                      stF(s),
+                    ),
+                  ),
+              {
+                cls: 1,
+                f2: STAT,
+                ph: "Name, ID, mobile, parent, address, class...",
+              },
+            ),
+      });
+      function doLogin() {
+        const x = USERS.find((k) => k.u == v("u").trim() && k.p == v("p"));
+        if (!x || !x.on) {
+          $("err").textContent =
+            x ?
+              "This login has been disabled by the Admin."
+            : "Incorrect username or password.";
+          $("err").classList.remove("hidden");
+          return;
+        }
+        ME = x;
+        role = x.r;
+        selStu = null;
+        $("err").classList.add("hidden");
+        $("login").classList.add("hidden");
+        $("app").classList.remove("hidden");
+        $("roleTag").textContent = R[role].n + ": " + x.n;
+        $("school").textContent =
+          role == "root" ? "VidyaDesk Control Panel" : S.name;
+        buildNav();
+        go("dash");
+      }
+      $("roleBtns").innerHTML = [
+        ["admin", "Admin (Principal)"],
+        ["clerk", "Clerk / Sub Admin"],
+        ["teacher", "Teacher: Mrs. Rekha (class teacher)"],
+        ["anil", "Teacher: Mr. Anil (subject teacher)"],
+      ]
+        .map((a) => {
+          const x = USERS.find((k) => k.u == a[0]);
+          return `<button class="btn b2 justify-center text-center" onclick="u.value='${x.u}';p.value='${x.p}'">${a[1]}</button>`;
+        })
+        .join("");
+      function prof(i) {
+        openRec(i);
+      }
+      function go(p) {
+        if (!navFor(role).some((n) => n[0] == p) && p != "search") {
+          toast("This module is turned OFF for your role");
+          return;
+        }
+        page = p;
+        $("main").innerHTML = (P[p] || (() => T("Coming soon")))();
+        document
+          .querySelectorAll(".nav")
+          .forEach((b) => b.classList.toggle("on", b.dataset.p == p));
+        if (innerWidth < 768) side.classList.add("hidden");
+        clearInterval(window.iv);
+        if (p == "punch") {
+          const t = () => {
+            const c = $("clk");
+            if (c) c.textContent = new Date().toLocaleTimeString("en-IN");
+          };
+          window.iv = setInterval(t, 1000);
+          t();
+        }
+        scrollTo(0, 0);
+      }
+    </script>
+  </body>
+</html>
